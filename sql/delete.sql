@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS forumSite;
+DROP USER IF EXISTS forumSite;
