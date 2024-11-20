@@ -14,6 +14,7 @@ require_once('models/postDB.php');
 require_once('models/commentDB.php');
 
 function return404() {
+    global $currentUser;
     $title = '404 Not Found';
     $body = 'That page does not exist.';
     include('views/shared/error.php');
