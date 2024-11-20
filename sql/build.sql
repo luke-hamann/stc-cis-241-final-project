@@ -12,6 +12,7 @@ SET default_storage_engine = InnoDB;
 CREATE TABLE Users (
     id int NOT NULL AUTO_INCREMENT,
     name varchar(64) NOT NULL,
+    password varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -56,13 +57,13 @@ TO 'forumSite'@'localhost';
 
 /* Insert sample data */
 
-INSERT INTO Users (name)
+INSERT INTO Users (name, password)
 VALUES
-    ('alice'),
-    ('bob'),
-    ('charlie'),
-    ('dave'),
-    ('edith');
+    ('alice', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy'),
+    ('bob', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy'),
+    ('charlie', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy'),
+    ('dave', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy'),
+    ('edith', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy');
 
 INSERT INTO Forums (name)
 VALUES
