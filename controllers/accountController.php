@@ -3,9 +3,6 @@
 require_once('./models/loginForm.php');
 require_once('./models/registerForm.php');
 
-$isGet = ($_SERVER['REQUEST_METHOD'] == 'GET');
-$isPost = ($_SERVER['REQUEST_METHOD'] == 'POST');
-
 if ($action == 'login' && $isGet) {
     include('./views/account/login.php');
     exit();

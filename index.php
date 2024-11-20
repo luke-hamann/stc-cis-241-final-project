@@ -28,6 +28,8 @@ if (!isset($_SESSION['userId'])) {
 $currentUser = UserDB::getUser($_SESSION['userId']);
 
 $action = FILTER_INPUT(INPUT_POST, 'action') ?? FILTER_INPUT(INPUT_GET, 'action') ?? 'home';
+$isGet = ($_SERVER['REQUEST_METHOD'] == 'GET');
+$isPost = ($_SERVER['REQUEST_METHOD'] == 'POST');
 
 require('./controllers/accountController.php');
 require('./controllers/homeController.php');

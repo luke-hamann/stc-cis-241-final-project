@@ -46,6 +46,10 @@ if ($action == 'post') {
 }
 
 if ($action == 'new') {
+    if (!isset($currentUser)) {
+        header('Location: ?action=login');
+    }
+
     if ($isGet) {
         $forums = ForumDB::getForums();
         include('./views/home/new.php');
@@ -62,6 +66,46 @@ if ($action == 'new') {
         $post->userId = $currentUser->id;
         $id = PostDB::addPost($post);
         header('Location: ?action=post&id=' . $id);
+    }
+}
+
+if ($action == 'editComment' || $action == 'deleteComment') {
+    $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT) ??
+        FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT) ??
+        false;
+    if ($id === false) return404();
+    $comment = CommentDB::getComment($id);
+    if ($comment === false || $comment->userId != $currentUser->id) {
+        return404();
+    }
+}
+
+if ($action == 'editComment') {
+    if ($isGet) {
+        include('./views/home/editComment.php');
+        exit();
+    } else if ($isPost) {
+        $content = FILTER_INPUT(INPUT_POST, 'content');
+        $comment->content = $content;
+
+        if (!$comment->isValid()) {
+            $errors = $comment->getErrors();
+            include('./views/home/editComment.php');
+            exit();
+        }
+
+        CommentDB::updateComment($comment);
+        header('Location: ?action=post&id=' . $comment->postId);
+    }
+}
+
+if ($action == 'deleteComment') {
+    if ($isGet) {
+        include('./views/home/deleteComment.php');
+        exit();
+    } else if ($isPost) {
+        CommentDB::deleteComment($id);
+        header('Location: ?action=post&id=' . $comment->postId);
     }
 }
 ?>
