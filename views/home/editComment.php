@@ -1,7 +1,7 @@
 <?php include('./views/shared/header.php'); ?>
 
 <h1>
-    Edit comment
+    Edit Comment
 </h1>
 
 <form action="?action=editComment" method="post">

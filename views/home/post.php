@@ -5,9 +5,8 @@
 </h1>
 <p>
     Posted to
-    <a href="?action=forum&id=<?php echo $post->forumId; ?>">
-        <?php echo htmlspecialchars($post->forum->name); ?>
-    </a>
+    <a href="?action=forum&id=<?php echo $post->forumId; ?>"><?php
+        echo htmlspecialchars($post->forum->name); ?></a>
     by
     <?php echo htmlspecialchars($post->user->name); ?>
     at
