@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/main.css" />
     <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
+<body class="container-fluid">
     <header>
         <nav>
             <ul>

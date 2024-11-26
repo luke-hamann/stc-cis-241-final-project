@@ -1,20 +1,6 @@
 <?php include('./views/shared/header.php'); ?>
 
-<h1>
-    <?php echo htmlspecialchars($post->title); ?>
-</h1>
-<p>
-    Posted to
-    <a href="?action=forum&id=<?php echo $post->forumId; ?>"><?php
-        echo htmlspecialchars($post->forum->name); ?></a>
-    by
-    <?php echo htmlspecialchars($post->user->name); ?>
-    at
-    <?php echo $post->creationDate->format(DATE_RFC7231); ?>
-</p>
-<p>
-    <?php echo nl2br(htmlspecialchars($post->content)); ?>
-</p>
+<?php include('./views/shared/post.php'); ?>
 
 <h2>Comments</h2>
 
@@ -38,7 +24,7 @@
 
 <?php if (count($post->comments) > 0) : ?>
     <?php foreach ($post->comments as $comment) : ?>
-        <div>
+        <div class="comment-component">
             <p>
                 <?php echo htmlspecialchars($comment->user->name); ?> 
             <p>

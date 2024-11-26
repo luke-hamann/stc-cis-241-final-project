@@ -1,8 +1,18 @@
 <?php include('./views/shared/header.php'); ?>
 
-<h1>New Post</h1>
+<?php
+if ($mode == 'Add') {
+    $formAction = '?action=new';
+} else if ($mode == 'Edit') {
+    $formAction = '?action=editPost&id=' . $post->id;
+}
+?>
 
-<form action="?action=new" method="post">
+<h1>
+    <?php echo $mode; ?> Post
+</h1>
+
+<form action="<?php echo $formAction; ?>" method="post">
     <?php include('./views/shared/formErrors.php'); ?>
     <div>
         <label for="forumId">
@@ -36,7 +46,7 @@
             echo (isset($post) ? $post->title : ''); ?></textarea>
     </div>
     <div>
-        <input type="submit" value="Post" />
+        <input type="submit" value="Submit" />
     </div>
 </form>
 

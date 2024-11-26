@@ -13,12 +13,66 @@ require_once('models/userDB.php');
 require_once('models/postDB.php');
 require_once('models/commentDB.php');
 
+/**
+ * Return a 404 Not Found Page
+ */
 function return404() {
     global $currentUser;
     $title = '404 Not Found';
     $body = 'That page does not exist.';
     include('views/shared/error.php');
     exit();
+}
+
+/**
+ * Redirect the user to the login page if they are not logged in
+ */
+function checkLoggedIn($currentUser) {
+    if (!isset($currentUser)) {
+        header('Location: ?action=login');
+    }
+}
+
+/**
+ * Attempt to get an object of a type and id and return a 404 if not found
+ */
+function getObjectOr404($type, $id) {
+    if (!isset($id) || $id === false) {
+        return404();
+    }
+
+    switch ($type) {
+        case 'forum':
+            $object = ForumDB::getForum($id);
+            break;
+        case 'post':
+            $object = PostDB::getPost($id);
+            break;
+        case 'comment':
+            $object = CommentDB::getComment($id);
+            break;
+        default:
+            return404();
+    }
+
+    if ($object === false) {
+        return404();
+    }
+
+    return $object;
+}
+
+/**
+ * 
+ */
+function getOwnedObjectOr404($type, $id, $currentUser) {
+    $object = getObjectOr404($type, $id);
+
+    if (!isset($currentUser) || $object->userId != $currentUser->id) {
+        return404();
+    }
+
+    return $object;
 }
 
 session_start();
@@ -33,6 +87,7 @@ $isPost = ($_SERVER['REQUEST_METHOD'] == 'POST');
 
 require('./controllers/accountController.php');
 require('./controllers/homeController.php');
+require('./controllers/postController.php');
 
 return404();
 

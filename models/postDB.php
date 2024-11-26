@@ -1,5 +1,13 @@
 <?php
+/**
+ * Title: Post Database
+ * Purpose: To view, add, update, and delete posts
+ */
 class PostDB {
+
+    /**
+     * Get recent posts across all forums
+     */
     public static function getRecentPosts(int $maxCount = 20) {
         $db = Database::getDB();
         $query = '
@@ -45,6 +53,9 @@ class PostDB {
         return $posts;
     }
 
+    /**
+     * Get all posts within a given forum
+     */
     public static function getForumPosts(int $forumId) {
         $db = Database::getDB();
         $query = '
@@ -88,6 +99,9 @@ class PostDB {
         return $posts;
     }
 
+    /**
+     * Get a single post
+     */
     public static function getPost(int $id) {
         $db = Database::getDB();
         $query = '
@@ -117,6 +131,9 @@ class PostDB {
         );
     }
 
+    /**
+     * Add a post
+     */
     public static function addPost(Post $post) {
         $db = Database::getDB();
         $query = '
@@ -131,6 +148,41 @@ class PostDB {
         $statement->execute();
         $statement->closeCursor();
         return $db->lastInsertId();
+    }
+
+    /**
+     * Update a post
+     */
+    public static function updatePost(Post $post) {
+        $db = Database::getDB();
+        $query = '
+            UPDATE Posts
+            SET title = :title, content = :content, userId = :userId, forumId = :forumId
+            WHERE id = :id
+        ';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':title', $post->title);
+        $statement->bindValue(':content', $post->content);
+        $statement->bindValue(':userId', $post->userId);
+        $statement->bindValue(':forumId', $post->forumId);
+        $statement->bindValue(':id', $post->id);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    /**
+     * Delete a post
+     */
+    public static function deletePost(Post $post) {
+        $db = Database::getDB();
+        $query = '
+            UPDATE Posts
+            SET title = \'[ Deleted ]\', content = \'[ Deleted ]\'
+            WHERE id = :id
+        ';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $post->id);
+        $statement->execute();
     }
 }
 
