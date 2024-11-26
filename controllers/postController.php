@@ -4,13 +4,17 @@
  * Purpose: To view, add, update, and delete posts and comments
  */
 
+require_once('./models/postViewModel.php');
+require_once('./models/editPostViewModel.php');
+require_once('./models/editCommentViewModel.php');
+require_once('./models/deletionViewModel.php');
+
 /**
  * Display a form for creating a new post
  */
 if ($action == 'new' && $isGet) {
     checkLoggedIn($currentUser);
-    $mode = 'Add';
-    $forums = ForumDB::getForums();
+    $model = new EditPostViewModel('Add', null, ForumDB::getForums(), $currentUser);
     include('./views/home/editPost.php');
     exit();
 }
@@ -21,17 +25,16 @@ if ($action == 'new' && $isGet) {
 if ($action == 'new' && $isPost) {
     checkLoggedIn($currentUser);
 
-    $post = Post::fromArray($_POST);
-    if (!$post->isValid()) {
-        $mode = 'Add';
-        $forums = ForumDB::getForums();
-        $errors = $post->getErrors();
+    $model = new EditPostViewModel('Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
+
+    if (!$model->isValid()) {
+        $errors = $model->getErrors();
         include('./views/home/editPost.php');
         exit();
     }
 
-    $post->userId = $currentUser->id;
-    $id = PostDB::addPost($post);
+    $model->post->userId = $currentUser->id;
+    $id = PostDB::addPost($model->post);
     header('Location: ?action=post&id=' . $id);
 }
 
@@ -42,8 +45,7 @@ if ($action == 'editPost' && $isGet) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
-    $mode = 'Edit';
-    $forums = ForumDB::getForums();
+    $model = new EditPostViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
     include('./views/home/editPost.php');
     exit();
 }
@@ -59,8 +61,7 @@ if ($action == 'editPost' && $isPost) {
     $post->id = $id;
     $post->userId = $currentUser->id;
     if (!$post->isValid()) {
-        $mode = 'Edit';
-        $forums = ForumDB::getForums();
+        $model = new EditPostViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
         $errors = $post->getErrors();
         include('./views/home/editPost.php');
         exit();
@@ -76,8 +77,14 @@ if ($action == 'deletePost' && $isGet) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
-    $object = $post;
-    include('./views/home/deleteObject.php');
+    $model = new DeletionViewModel(
+        $post->id,
+        $post->title,
+        '?action=deletePost&id=',
+        '?action=post&id=' . $post->id,
+        $currentUser
+    );
+    include('./views/shared/deleteObject.php');
     exit();
 }
 
@@ -102,6 +109,7 @@ if ($action == 'post' && $isPost) {
     $post = getObjectOr404('post', $id);
     $comment = Comment::fromArray($_POST);
     if (!$comment->isValid()) {
+        $model = new PostViewModel($post, $currentUser);
         include('./views/home/post.php');
         exit();
     }
@@ -118,6 +126,7 @@ if ($action == 'editComment' && $isGet) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $comment = getObjectOr404('comment', $id);
+    $model = new EditCommentViewModel($comment, $currentUser);
     include('./views/home/editComment.php');
     exit();
 }
@@ -128,16 +137,12 @@ if ($action == 'editComment' && $isGet) {
 if ($action == 'editComment' && $isPost) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $comment = getObjectOr404('comment', $id);
-
-    if ($comment->userId != $currentUser->id) {
-        return404();
-    }
-
+    $comment = getOwnedObjectOr404('comment', $id, $currentUser);
     $content = FILTER_INPUT(INPUT_POST, 'content');
     $comment->content = $content;
 
     if (!$comment->isValid()) {
+        $model = new EditCommentViewModel($comment, $currentUser);
         $errors = $comment->getErrors();
         include('./views/home/editComment.php');
         exit();
@@ -153,8 +158,15 @@ if ($action == 'editComment' && $isPost) {
 if ($action == 'deleteComment' && $isGet) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $object = getObjectOr404('comment', $id);
-    include('./views/home/deleteObject.php');
+    $comment = getOwnedObjectOr404('comment', $id, $currentUser);
+    $model = new DeletionViewModel(
+        $comment->id,
+        $comment->content,
+        '?action=deleteComment&id=',
+        '?action=post&id=' . $comment->postId,
+        $currentUser
+    );
+    include('./views/shared/deleteObject.php');
     exit();
 }
 
@@ -164,12 +176,7 @@ if ($action == 'deleteComment' && $isGet) {
 if ($action == 'deleteComment' && $isPost) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $comment = getObjectOr404('comment', $id);
-
-    if ($comment->userId != $currentUser->id) {
-        return404();
-    }
-
+    $comment = getOwnedObjectOr404('comment', $id, $currentUser);
     CommentDB::deleteComment($id);
     header('Location: ?action=post&id=' . $comment->postId);
 }

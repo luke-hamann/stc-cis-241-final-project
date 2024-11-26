@@ -4,7 +4,7 @@
     Home
 </h1>
 
-<?php if (isset($currentUser)) : ?>
+<?php if (isset($model->currentUser)) : ?>
     <p>
         <a href="?action=new">
             New Post
@@ -12,7 +12,7 @@
     </p>
 <?php endif; ?>
 
-<?php foreach ($posts as $post) : ?>
+<?php foreach ($model->posts as $post) : ?>
     <?php include('./views/shared/post.php'); ?>
 <?php endforeach; ?>
 

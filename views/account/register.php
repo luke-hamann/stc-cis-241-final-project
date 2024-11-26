@@ -1,3 +1,9 @@
+<?php
+/**
+ * Model: RegisterViewModel
+ */
+?>
+
 <?php include('./views/shared/header.php'); ?>
 
 <h1>Register</h1>
@@ -7,7 +13,7 @@
     <div>
         <label for="name">Username</label>
         <input type="text" name="name" id="name" value="<?php
-            echo (isset($registerForm) ? $registerForm->name : ''); ?>" />
+            echo (isset($model) ? $model->name : ''); ?>" />
     </div>
     <div>
         <label for="password">Password</label>

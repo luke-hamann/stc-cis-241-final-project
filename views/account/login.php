@@ -1,3 +1,9 @@
+<?php
+/**
+ * Model: LoginViewModel
+ */
+?>
+
 <?php include('./views/shared/header.php'); ?>
 
 <h1>Login</h1>
@@ -8,7 +14,7 @@
         <label for="name">Name</label>
         <input type="text" name="name"
             value="<?php echo (
-                isset($loginForm) ? htmlspecialchars($loginForm->name) : ''); ?>" />
+                isset($model) ? htmlspecialchars($model->name) : ''); ?>" />
     </div>
     <div>
         <label for="password">Password</label>

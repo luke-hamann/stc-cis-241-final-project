@@ -9,6 +9,7 @@ class CommentDB {
                 Comments.creationDate,
                 Users.id userId,
                 Users.name userName,
+                Users.admin userAdmin,
                 Posts.id postId
             FROM Comments
                 JOIN Users ON Comments.userId = Users.id
@@ -29,7 +30,7 @@ class CommentDB {
             new DateTime($row['creationDate']),
             $row['postId'],
             $row['userId'],
-            new User($row['userId'], $row['userName'], '')
+            new User($row['userId'], $row['userName'], '', $row['userAdmin'])
         );
     }
 
@@ -42,6 +43,7 @@ class CommentDB {
                 Comments.creationDate,
                 Users.id userId,
                 Users.name userName,
+                Users.admin userAdmin,
                 Posts.id postId
             FROM Comments
                 JOIN Users ON Comments.userId = Users.id
@@ -63,7 +65,7 @@ class CommentDB {
                 new DateTime($row['creationDate']),
                 $row['postId'],
                 $row['userId'],
-                new User($row['userId'], $row['userName'], '')
+                new User($row['userId'], $row['userName'], '', $row['userAdmin'])
             );
             $comments[] = $comment;
         }

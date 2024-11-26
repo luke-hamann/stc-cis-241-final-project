@@ -1,11 +1,13 @@
 <?php
-class LoginForm {
+class LoginViewModel {
     public $name;
     public $password;
+    public $currentUser;
 
-    private function __construct(string $name, string $password) {
+    public function __construct(string $name, string $password, $currentUser) {
         $this->name = $name;
         $this->password = $password;
+        $this->currentUser = $currentUser;
     }
 
     public static function fromArray(array $array) {
@@ -20,7 +22,7 @@ class LoginForm {
             $password = $array['password'];
         }
 
-        return new LoginForm($name, $password);
+        return new LoginViewModel($name, $password, null);
     }
 
     public function getErrors() {

@@ -5,15 +5,15 @@
 </h1>
 
 <form action="?action=editComment" method="post">
-    <input type="hidden" name="id" value="<?php echo $comment->id; ?>" />
+    <input type="hidden" name="id" value="<?php echo $model->comment->id; ?>" />
     <?php include('./views/shared/formErrors.php'); ?>
     <div>
         <textarea name="content"><?php
-            echo htmlspecialchars($comment->content); ?></textarea>
+            echo htmlspecialchars($model->comment->content); ?></textarea>
     </div>
     <div>
         <input type="submit" value="Save" />
-        <a href="?action=post&id=<?php echo $comment->postId; ?>">
+        <a href="?action=post&id=<?php echo $model->comment->postId; ?>">
             Cancel
         </a>
     </div>

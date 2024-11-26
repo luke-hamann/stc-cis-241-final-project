@@ -56,7 +56,7 @@ class Post {
             $content,
             new DateTime(),
             0,
-            new User(0, '', ''),
+            new User(0, '', '', false),
             $forumId,
             new Forum(0, '', []),
             []

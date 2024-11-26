@@ -18,6 +18,7 @@ class PostDB {
                 Posts.creationDate,
                 Users.id userId,
                 Users.name userName,
+                Users.admin userAdmin,
                 Forums.id forumId,
                 Forums.name forumName
             FROM Posts
@@ -34,7 +35,7 @@ class PostDB {
 
         $posts = array();
         foreach ($rows as $row) {
-            $user = new User($row['userId'], $row['userName'], '');
+            $user = new User($row['userId'], $row['userName'], '', $row['userAdmin']);
             $forum = new Forum($row['forumId'], $row['forumName'], []);
             $post = new Post(
                 $row['id'],
@@ -66,6 +67,7 @@ class PostDB {
                 Posts.creationDate,
                 Users.id userId,
                 Users.name userName,
+                Users.admin userAdmin,
                 Forums.id forumId,
                 Forums.name forumName
             FROM Posts
@@ -88,7 +90,7 @@ class PostDB {
                 $row['content'],
                 new DateTime($row['creationDate']),
                 $row['userId'],
-                new User($row['userId'], $row['userName'], ''),
+                new User($row['userId'], $row['userName'], '', $row['userAdmin']),
                 $row['forumId'],
                 new Forum($row['forumId'], $row['forumName'], array()),
                 []
@@ -173,13 +175,21 @@ class PostDB {
     /**
      * Delete a post
      */
-    public static function deletePost(Post $post) {
+    public static function deletePost(Post $post, bool $deleteThread = false) {
         $db = Database::getDB();
-        $query = '
+
+        if ($deleteThread) {
+            $query = '
+                DELETE FROM Posts WHERE id = :id
+            ';
+        } else {
+            $query = '
             UPDATE Posts
-            SET title = \'[ Deleted ]\', content = \'[ Deleted ]\'
+            SET title = \'deleted\', content = \'deleted\'
             WHERE id = :id
         ';
+        }
+
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $post->id);
         $statement->execute();

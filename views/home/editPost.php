@@ -1,15 +1,15 @@
 <?php include('./views/shared/header.php'); ?>
 
 <?php
-if ($mode == 'Add') {
+if ($model->mode == 'Add') {
     $formAction = '?action=new';
-} else if ($mode == 'Edit') {
+} else if ($model->mode == 'Edit') {
     $formAction = '?action=editPost&id=' . $post->id;
 }
 ?>
 
 <h1>
-    <?php echo $mode; ?> Post
+    <?php echo $model->mode; ?> Post
 </h1>
 
 <form action="<?php echo $formAction; ?>" method="post">
@@ -20,12 +20,12 @@ if ($mode == 'Add') {
         </label>
         <select name="forumId" id="forumId">
             <option value="0"
-                <?php echo (isset($post) && $post->forumId == 0 ? 'selected' : ''); ?>>
+                <?php echo (isset($model->post) && $model->post->forumId == 0 ? 'selected' : ''); ?>>
                 -
             </option>
-            <?php foreach ($forums as $forum) : ?>
+            <?php foreach ($model->forums as $forum) : ?>
                 <option value="<?php echo $forum->id; ?>"
-                    <?php echo (isset($post) && $post->forumId == $forum->id ? 'selected' : ''); ?>>
+                    <?php echo (isset($model->post) && $model->post->forumId == $forum->id ? 'selected' : ''); ?>>
                     <?php echo htmlspecialchars($forum->name); ?>
                 </option>
             <?php endforeach; ?>
@@ -36,14 +36,14 @@ if ($mode == 'Add') {
             Title
         </label>
         <input type="text" name="title" id="title"
-            value="<?php echo (isset($post) ? $post->title : ''); ?>" />
+            value="<?php echo (isset($model->post) ? $model->post->title : ''); ?>" />
     </div>
     <div>
         <label for="content">
             Content
         </label>
         <textarea name="content" id="content" rows="5"><?php
-            echo (isset($post) ? $post->title : ''); ?></textarea>
+            echo (isset($model->post) ? $model->post->title : ''); ?></textarea>
     </div>
     <div>
         <input type="submit" value="Submit" />

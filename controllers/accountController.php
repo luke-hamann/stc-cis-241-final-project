@@ -4,9 +4,12 @@
  * Purpose: To manage user sessions, including logins, logouts, and registrations
  */
 
-require_once('./models/loginForm.php');
-require_once('./models/registerForm.php');
+require_once('./models/LoginViewModel.php');
+require_once('./models/RegisterViewModel.php');
 
+/**
+ * Redirect the user to home if they are already logged in
+ */
 function sendHomeIfLoggedIn($currentUser) {
     if (isset($currentUser)) {
         header('Location: .');
@@ -18,6 +21,7 @@ function sendHomeIfLoggedIn($currentUser) {
  */
 if ($action == 'login' && $isGet) {
     sendHomeIfLoggedIn($currentUser);
+    $model = new LoginViewModel('', '', $currentUser);
     include('./views/account/login.php');
     exit();
 }
@@ -28,14 +32,14 @@ if ($action == 'login' && $isGet) {
 if ($action == 'login' && $isPost) {
     sendHomeIfLoggedIn($currentUser);
 
-    $loginForm = LoginForm::fromArray($_POST);
-    if (!$loginForm->isValid()) {
-        $errors = $loginForm->getErrors();
+    $model = LoginViewModel::fromArray($_POST);
+    if (!$model->isValid()) {
+        $errors = $model->getErrors();
         include('./views/account/login.php');
         exit();
     }
 
-    $user = UserDB::loginUser($loginForm->name, $loginForm->password);
+    $user = UserDB::loginUser($model->name, $model->password);
     if (!isset($user)) {
         $errors = ['Invalid credentials.'];
         include('./views/account/login.php');
@@ -51,6 +55,7 @@ if ($action == 'login' && $isPost) {
  */
 if ($action == 'register' && $isGet) {
     sendHomeIfLoggedIn($currentUser);
+    $model = new RegisterViewModel('', '', '');
     include('./views/account/register.php');
     exit();
 }
@@ -60,10 +65,10 @@ if ($action == 'register' && $isGet) {
  */
 if ($action == 'register' && $isPost) {
     sendHomeIfLoggedIn($currentUser);
-    $registerForm = RegisterForm::fromArray($_POST);
+    $model = RegisterViewModel::fromArray($_POST);
 
-    $errors = $registerForm->getErrors();
-    if (UserDB::getUserByName($registerForm->name) !== null) {
+    $errors = $model->getErrors();
+    if (UserDB::getUserByName($model->name) !== null) {
         array_unshift($errors, 'Username is taken.');
     }
 
@@ -72,7 +77,7 @@ if ($action == 'register' && $isPost) {
         exit();
     }
 
-    $userId = UserDB::addUser($registerForm->getUser());
+    $userId = UserDB::addUser($model->getUser());
     $_SESSION['userId'] = $userId;
     header('Location: .');
 }

@@ -1,7 +1,13 @@
 <?php
+/**
+ * Title: User Database
+ * Purpose: To list, add, update, and delete users
+ */
 class UserDB {
-    private function __construct() {}
 
+    /**
+     * Get a user based on their id
+     */
     public static function getUser(int $id) {
         $db = Database::getDB();
         $query = 'SELECT * FROM Users WHERE id = :id';
@@ -11,9 +17,12 @@ class UserDB {
         $row = $statement->fetch();
         $statement->closeCursor();
         if ($row === false) return null;
-        return new User($row['id'], $row['name'], '');
+        return new User($row['id'], $row['name'], '', $row['admin']);
     }
 
+    /**
+     * Get a user based on their name
+     */
     public static function getUserByName(string $name) {
         $db = Database::getDB();
         $query = 'SELECT * FROM Users WHERE name = :name';
@@ -23,9 +32,12 @@ class UserDB {
         $row = $statement->fetch();
         $statement->closeCursor();
         if ($row === false) return null;
-        return new User($row['id'], $row['name'], '');
+        return new User($row['id'], $row['name'], '', $row['admin']);
     }
 
+    /**
+     * Attempt to authenticate given credentials
+     */
     public static function loginUser(string $name, string $password) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $db = Database::getDB();
@@ -41,15 +53,18 @@ class UserDB {
             return null;
         }
 
-        return new User($row['id'], $row['name'], '');
+        return new User($row['id'], $row['name'], '', $row['admin']);
     }
 
+    /**
+     * Add a user
+     */
     public static function addUser(User $user) {
         $db = Database::getDB();
         $user->password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
-            INSERT INTO Users (name, password)
-            VALUES (:name, :password)
+            INSERT INTO Users (name, password, admin)
+            VALUES (:name, :password, FALSE)
         ';
         $statement = $db->prepare($query);
         $statement->bindValue(':name', $user->name);
@@ -57,6 +72,13 @@ class UserDB {
         $statement->execute();
         $statement->closeCursor();
         return $db->lastInsertId();
+    }
+
+    /**
+     * Update a user
+     */
+    public static function updateUser(User $user) {
+
     }
 }
 ?>

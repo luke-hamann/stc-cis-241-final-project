@@ -29,7 +29,14 @@ class Comment {
             $content = '';
         }
 
-        return new Comment(0, $content, new DateTime(), $postId, 0, new User(0, '', ''));
+        return new Comment(
+            0,
+            $content,
+            new DateTime(),
+            $postId,
+            0,
+            new User(0, '', '', false)
+        );
     }
 
     public function getErrors() {

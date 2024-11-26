@@ -22,7 +22,16 @@
                         Forums
                     </a>
                 </li>
-                <?php if (!isset($currentUser)) : ?>
+                <?php if (isset($model->currentUser)) : ?>
+                    <li>
+                        Logged in as <?php echo htmlspecialchars($model->currentUser->name); ?>
+                    </li>
+                    <li>
+                        <form action="?action=logout" method="post">
+                            <input type="submit" value="Logout" />
+                        </form>
+                    </li>
+                <?php else : ?>
                     <li>
                         <a href="?action=login">
                             Login
@@ -32,15 +41,6 @@
                         <a href="?action=register">
                             Register
                         </a>
-                    </li>
-                <?php else : ?>
-                    <li>
-                        Logged in as <?php echo htmlspecialchars($currentUser->name); ?>
-                    </li>
-                    <li>
-                        <form action="?action=logout" method="post">
-                            <input type="submit" value="Logout" />
-                        </form>
                     </li>
                 <?php endif; ?>
             </ul>

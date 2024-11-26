@@ -34,6 +34,16 @@ function checkLoggedIn($currentUser) {
 }
 
 /**
+ * Verify that a user is an admin
+ */
+function checkAdmin($currentUser) {
+    checkLoggedIn($currentUser);
+    if (!$currentUser->admin) {
+        return404();
+    }
+}
+
+/**
  * Attempt to get an object of a type and id and return a 404 if not found
  */
 function getObjectOr404($type, $id) {
@@ -85,6 +95,7 @@ $action = FILTER_INPUT(INPUT_POST, 'action') ?? FILTER_INPUT(INPUT_GET, 'action'
 $isGet = ($_SERVER['REQUEST_METHOD'] == 'GET');
 $isPost = ($_SERVER['REQUEST_METHOD'] == 'POST');
 
+require('./controllers/adminController.php');
 require('./controllers/accountController.php');
 require('./controllers/homeController.php');
 require('./controllers/postController.php');

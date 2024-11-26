@@ -1,5 +1,5 @@
 <?php
-class RegisterForm {
+class RegisterViewModel {
     public $name;
     public $password;
     public $passwordConfirm;
@@ -33,7 +33,7 @@ class RegisterForm {
             $passwordConfirm = $array['passwordConfirm'];
         }
 
-        return new RegisterForm($name, $password, $passwordConfirm);
+        return new RegisterViewModel($name, $password, $passwordConfirm);
     }
 
     public function getErrors() {
