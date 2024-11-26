@@ -25,7 +25,7 @@ if ($action == 'login' && $isGet) {
 /**
  * Accept form data for logging in
  */
-if ($action == 'login' && isPost) {
+if ($action == 'login' && $isPost) {
     sendHomeIfLoggedIn($currentUser);
 
     $loginForm = LoginForm::fromArray($_POST);
