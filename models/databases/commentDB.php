@@ -6,6 +6,28 @@
 class CommentDB {
 
     /**
+     * Convert SQL result rows to a list of comment objects
+     */
+    public static function convertRowsToComments($rows) {
+        $comments = array();
+        foreach ($rows as $row) {
+            $user = new User($row['userId'], $row['userName'], '', $row['userAdmin']);
+            $comment = new Comment(
+                $row['id'],
+                $row['content'],
+                new DateTime($row['creationDate']),
+                $row['postId'],
+                null,
+                $row['userId'],
+                $user
+            );
+            $comments[] = $comment;
+        }
+
+        return $comments;
+    }
+
+    /**
      * Get a comment by its id
      */
     public static function getComment(int $id) {
@@ -37,6 +59,7 @@ class CommentDB {
             $row['content'],
             new DateTime($row['creationDate']),
             $row['postId'],
+            null,
             $row['userId'],
             new User($row['userId'], $row['userName'], '', $row['userAdmin'])
         );
@@ -68,20 +91,36 @@ class CommentDB {
         $rows = $statement->fetchAll();
         $statement->closeCursor();
 
-        $comments = array();
-        foreach ($rows as $row) {
-            $comment = new Comment(
-                $row['id'],
-                $row['content'],
-                new DateTime($row['creationDate']),
-                $row['postId'],
-                $row['userId'],
-                new User($row['userId'], $row['userName'], '', $row['userAdmin'])
-            );
-            $comments[] = $comment;
-        }
+        return self::convertRowsToComments($rows);
+    }
 
-        return $comments;
+    /**
+     * Get all comments associated with a given user
+     */
+    public static function getUserComments(int $userId) {
+        $db = Database::getDB();
+        $query = '
+            SELECT
+                Comments.id,
+                Comments.content,
+                Comments.creationDate,
+                Users.id userId,
+                Users.name userName,
+                Users.admin userAdmin,
+                Posts.id postId
+            FROM Comments
+                JOIN Users ON Comments.userId = Users.id
+                JOIN Posts ON Comments.postId = Posts.id
+            WHERE Comments.userId = :userId
+            ORDER BY Comments.creationDate
+        ';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':userId', $userId);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+
+        return self::convertRowsToComments($rows);
     }
 
     /**

@@ -11,7 +11,7 @@
         No forums.
     </p>
 <?php else : ?>
-    <table>
+    <table class="table table-striped">
         <tbody>
             <?php foreach ($model->forums as $forum) : ?>
                 <tr>

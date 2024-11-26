@@ -8,17 +8,19 @@ class Comment {
     public $content;
     public $creationDate;
     public $postId;
+    public $post;
     public $userId;
     public $user;
 
     /**
      * Construct a comment object
      */
-    public function __construct($id, $content, $creationDate, $postId, $userId, $user) {
+    public function __construct($id, $content, $creationDate, $postId, $post, $userId, $user) {
         $this->id = $id;
         $this->content = $content;
         $this->creationDate = $creationDate;
         $this->postId = $postId;
+        $this->post = $post;
         $this->userId = $userId;
         $this->user = $user;
     }
@@ -44,6 +46,7 @@ class Comment {
             $content,
             new DateTime(),
             $postId,
+            null,
             0,
             new User(0, '', '', false)
         );

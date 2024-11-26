@@ -6,6 +6,8 @@
 require_once('./models/viewModels/homeViewModel.php');
 require_once('./models/viewModels/forumsViewModel.php');
 require_once('./models/viewModels/forumViewModel.php');
+require_once('./models/viewModels/usersViewModel.php');
+require_once('./models/viewModels/userViewModel.php');
 require_once('./models/viewModels/postViewModel.php');
 
 /**
@@ -34,6 +36,40 @@ if ($action == 'forum' && $isGetRequest) {
     $forum = getObjectOr404('forum', $id);
     $model = new ForumViewModel($forum, $currentUser);
     include('./views/home/forum.php');
+    exit();
+}
+
+/**
+ * Display the list of all users
+ */
+if ($action == 'users' && $isGetRequest) {
+    $model = new UsersViewModel(UserDB::getUsers(), $currentUser);
+    include('./views/home/users.php');
+    exit();
+}
+
+/**
+ * Display a single user
+ */
+if ($action == 'user' && $isGetRequest) {
+    $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $user = getObjectOr404('user', $id);
+
+    $mode = FILTER_INPUT(INPUT_GET, 'mode');
+    if ($mode !== 'posts' && $mode !== 'comments') {
+        $mode = 'posts';
+    }
+
+    $posts = [];
+    $comments = [];
+    if ($mode == 'posts') {
+        $posts = PostDB::getUserPosts($id);
+    } else {
+        $comments = CommentDB::getUserComments($id);
+    }
+
+    $model = new UserViewModel($user, $mode, $posts, $comments, $currentUser);
+    include('./views/home/user.php');
     exit();
 }
 

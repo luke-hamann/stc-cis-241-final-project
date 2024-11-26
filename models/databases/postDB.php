@@ -5,6 +5,28 @@
  */
 class PostDB {
 
+    private static function convertRowsToPosts($rows) {
+        $posts = array();
+        foreach ($rows as $row) {
+            $user = new User($row['userId'], $row['userName'], '', $row['userAdmin']);
+            $forum = new Forum($row['forumId'], $row['forumName'], []);
+            $post = new Post(
+                $row['id'],
+                $row['title'],
+                $row['content'],
+                new DateTime($row['creationDate']),
+                $row['userId'],
+                $user,
+                $row['forumId'],
+                $forum,
+                []
+            );
+            $posts[] = $post;
+        }
+
+        return $posts;
+    }
+
     /**
      * Get recent posts across all forums
      */
@@ -33,25 +55,7 @@ class PostDB {
         $rows = $statement->fetchAll();
         $statement->closeCursor();
 
-        $posts = array();
-        foreach ($rows as $row) {
-            $user = new User($row['userId'], $row['userName'], '', $row['userAdmin']);
-            $forum = new Forum($row['forumId'], $row['forumName'], []);
-            $post = new Post(
-                $row['id'],
-                $row['title'],
-                $row['content'],
-                new DateTime($row['creationDate']),
-                $row['userId'],
-                $user,
-                $row['forumId'],
-                $forum,
-                []
-            );
-            $posts[] = $post;
-        }
-
-        return $posts;
+        return self::convertRowsToPosts($rows);
     }
 
     /**
@@ -82,23 +86,35 @@ class PostDB {
         $rows = $statement->fetchAll();
         $statement->closeCursor();
         
-        $posts = array();
-        foreach ($rows as $row) {
-            $post = new Post(
-                $row['id'],
-                $row['title'],
-                $row['content'],
-                new DateTime($row['creationDate']),
-                $row['userId'],
-                new User($row['userId'], $row['userName'], '', $row['userAdmin']),
-                $row['forumId'],
-                new Forum($row['forumId'], $row['forumName'], array()),
-                []
-            );
-            $posts[] = $post;
-        }
+        return self::convertRowsToPosts($rows);
+    }
 
-        return $posts;
+    public static function getUserPosts(int $userId) {
+        $db = Database::getDB();
+        $query = '
+            SELECT
+                Posts.id,
+                Posts.title,
+                Posts.content,
+                Posts.creationDate,
+                Users.id userId,
+                Users.name userName,
+                Users.admin userAdmin,
+                Forums.id forumId,
+                Forums.name forumName
+            FROM Posts
+                JOIN Users ON Posts.userId = Users.id
+                JOIN Forums ON Posts.forumId = Forums.id
+            WHERE Posts.userId = :userId
+            ORDER BY Posts.creationDate DESC
+        ';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':userId', $userId);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+
+        return self::convertRowsToPosts($rows);
     }
 
     /**

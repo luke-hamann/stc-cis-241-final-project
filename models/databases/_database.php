@@ -11,6 +11,9 @@ class Database {
 
     private function __construct() {}
 
+    /**
+     * Return the database connection
+     */
     public static function getDB() {
         if (isset($db)) return $db;
 

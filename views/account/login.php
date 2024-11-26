@@ -12,13 +12,13 @@
     <?php include ('./views/shared/formErrors.php'); ?>
     <div>
         <label for="name">Name</label>
-        <input type="text" name="name"
+        <input type="text" name="name" id="name"
             value="<?php echo (
                 isset($model) ? htmlspecialchars($model->name) : ''); ?>" />
     </div>
     <div>
         <label for="password">Password</label>
-        <input type="password" name="password" />
+        <input type="password" name="password" id="password" />
     </div>
     <div>
         <input type="submit" value="Login" />

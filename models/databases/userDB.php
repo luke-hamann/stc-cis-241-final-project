@@ -6,6 +6,25 @@
 class UserDB {
 
     /**
+     * Get a list of all users
+     */
+    public static function getUsers() {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM Users ORDER BY name';
+        $statement = $db->prepare($query);
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+
+        $users = [];
+        foreach ($rows as $row) {
+            $users[] = new User($row['id'], $row['name'], '', $row['admin']);
+        }
+
+        return $users;
+    }
+
+    /**
      * Get a user based on their id
      */
     public static function getUser(int $id) {
@@ -75,10 +94,33 @@ class UserDB {
     }
 
     /**
-     * Update a user
+     * Update a user's password
      */
-    public static function updateUser(User $user) {
+    public static function updateUserPassword(User $user) {
+        $db = Database::getDB();
+        $query = '
+            UPDATE Users
+            SET password = :password
+            WHERE id = :id
+        ';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':password',
+            password_hash($user->password, PASSWORD_DEFAULT));
+        $statement->bindValue(':id', $user->id);
+        $statement->execute();
+        $statement->closeCursor();
+    }
 
+    /**
+     * Delete a user
+     */
+    public static function deleteUser(User $user) {
+        $db = Database::getDB();
+        $query = 'DELETE FROM Users WHERE id = :id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $user->id);
+        $statement->execute();
+        $statement->closeCursor();
     }
 }
 ?>
