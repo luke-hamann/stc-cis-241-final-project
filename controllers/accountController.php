@@ -58,7 +58,7 @@ if ($action == 'register' && $isGet) {
 /**
  * Accept form data for registering
  */
-if ($action == 'register' && isPost) {
+if ($action == 'register' && $isPost) {
     sendHomeIfLoggedIn($currentUser);
     $registerForm = RegisterForm::fromArray($_POST);
 
