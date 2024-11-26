@@ -1,4 +1,8 @@
 <?php
+/**
+ * Title: Comment Model
+ * Purpose: To represent a comment on a post
+ */
 class Comment {
     public int $id;
     public string $content;
@@ -7,6 +11,9 @@ class Comment {
     public int $userId;
     public User $user;
 
+    /**
+     * Construct a comment object
+     */
     public function __construct($id, $content, $creationDate, $postId, $userId, $user) {
         $this->id = $id;
         $this->content = $content;
@@ -16,6 +23,9 @@ class Comment {
         $this->user = $user;
     }
 
+    /**
+     * Construct a comment object based on an associate array
+     */
     public static function fromArray(array $array) {
         if (array_key_exists('postId', $array)) {
             $postId = (int)$array['postId'];
@@ -39,6 +49,9 @@ class Comment {
         );
     }
 
+    /**
+     * Validate the comment and generate error messages if applicable
+     */
     public function getErrors() {
         $errors = [];
 
@@ -47,10 +60,6 @@ class Comment {
         }
 
         return $errors;
-    }
-    
-    public function isValid() {
-        return (count($this->getErrors()) == 0);
     }
 }
 ?>

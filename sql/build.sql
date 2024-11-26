@@ -1,5 +1,6 @@
 /*
     Title: Database Build
+    Purpose: To create the database, user, and tables, and insert sample data
 */
 
 DROP DATABASE IF EXISTS forumSite;

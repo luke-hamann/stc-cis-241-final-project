@@ -33,15 +33,15 @@ if ($action == 'login' && $isPost) {
     sendHomeIfLoggedIn($currentUser);
 
     $model = LoginViewModel::fromArray($_POST);
+    $model->validate();
     if (!$model->isValid()) {
-        $errors = $model->getErrors();
         include('./views/account/login.php');
         exit();
     }
 
     $user = UserDB::loginUser($model->name, $model->password);
     if (!isset($user)) {
-        $errors = ['Invalid credentials.'];
+        $model->pushError('Invalid credentials');
         include('./views/account/login.php');
         exit();
     }
@@ -66,13 +66,12 @@ if ($action == 'register' && $isGet) {
 if ($action == 'register' && $isPost) {
     sendHomeIfLoggedIn($currentUser);
     $model = RegisterViewModel::fromArray($_POST);
-
-    $errors = $model->getErrors();
+    $model->validate();
     if (UserDB::getUserByName($model->name) !== null) {
-        array_unshift($errors, 'Username is taken.');
+        $model->unshiftError('Username is taken.');
     }
 
-    if (count($errors) > 0) {
+    if (!$model->isValid()) {
         include('./views/account/register.php');
         exit();
     }

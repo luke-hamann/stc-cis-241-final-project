@@ -1,4 +1,8 @@
 <?php
+/**
+ * Title: Post Model
+ * Purpose: To represent a post on the site
+ */
 class Post {
     public int $id;
     public string $title;
@@ -13,6 +17,9 @@ class Post {
     private static $titlePattern = '/^[^\n]{1,128}$/';
     private static $contentPattern = '/^.{1,1024}$/';
 
+    /**
+     * Construct a post object
+     */
     public function __construct($id, $title, $content, $creationDate, $userId, $user, $forumId, $forum, $comments) {
         $this->id = $id;
         $this->title = $title;
@@ -25,6 +32,9 @@ class Post {
         $this->comments = $comments;
     }
 
+    /**
+     * Construct a post object based on an associative array
+     */
     public static function fromArray(array $array) {
         if (array_key_exists('id', $array)) {
             $id = (int)$array['id'];
@@ -56,13 +66,16 @@ class Post {
             $content,
             new DateTime(),
             0,
-            new User(0, '', '', false),
+            null,
             $forumId,
-            new Forum(0, '', []),
+            null,
             []
         );
     }
 
+    /**
+     * Validate the post and generate error messages if applicable
+     */
     public function getErrors() {
         $errors = [];
 
@@ -79,10 +92,6 @@ class Post {
         }
 
         return $errors;
-    }
-
-    public function isValid() {
-        return (count($this->getErrors()) == 0);
     }
 }
 ?>

@@ -16,10 +16,8 @@ require_once('models/databases/commentDB.php');
 /**
  * Return a 404 Not Found Page
  */
-function return404() {
-    global $currentUser;
-    $title = '404 Not Found';
-    $body = 'That page does not exist.';
+function return404($currentUser) {
+    $model = new ErrorViewModel('404 Not Found', 'That page does not exist.', $currentUser);
     include('views/shared/error.php');
     exit();
 }
@@ -39,7 +37,7 @@ function checkLoggedIn($currentUser) {
 function checkAdmin($currentUser) {
     checkLoggedIn($currentUser);
     if (!$currentUser->admin) {
-        return404();
+        return404($currentUser);
     }
 }
 
@@ -48,7 +46,7 @@ function checkAdmin($currentUser) {
  */
 function getObjectOr404($type, $id) {
     if (!isset($id) || $id === false) {
-        return404();
+        return404($currentUser);
     }
 
     switch ($type) {
@@ -62,11 +60,11 @@ function getObjectOr404($type, $id) {
             $object = CommentDB::getComment($id);
             break;
         default:
-            return404();
+            return404($currentUser);
     }
 
     if ($object === false) {
-        return404();
+        return404($currentUser);
     }
 
     return $object;
@@ -79,7 +77,7 @@ function getOwnedObjectOr404($type, $id, $currentUser) {
     $object = getObjectOr404($type, $id);
 
     if (!isset($currentUser) || $object->userId != $currentUser->id) {
-        return404();
+        return404($currentUser);
     }
 
     return $object;
@@ -100,6 +98,6 @@ require('./controllers/accountController.php');
 require('./controllers/homeController.php');
 require('./controllers/postController.php');
 
-return404();
+return404($currentUser);
 
 ?>

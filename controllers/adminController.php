@@ -22,14 +22,13 @@ if ($action == 'addForum' && $isGet) {
 if ($action == 'addForum' && $isPost) {
     checkAdmin($currentUser);
     $forum = Forum::fromArray($_POST);
-    $errors = $forum->getErrors();
+    $model = new EditForumViewModel($forum, 'Add', $currentUser);
 
     if (!ForumDB::isForumValid($forum)) {
-        $errors[] = 'A forum with that name already exists.';
+        $model->pushError('A forum with that name already exists.');
     }
 
-    if (count($errors) > 0) {
-        $model = new EditForumViewModel($forum, 'Add', $currentUser);
+    if (!$model->isValid()) {
         include('./views/admin/editForum.php');
         exit();
     }
@@ -57,13 +56,14 @@ if ($action == 'editForum' && $isPost) {
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     getObjectOr404('forum', $id);
     $forum = Forum::fromArray($_POST);
-    $errors = $forum->getErrors();
+    $model = new EditForumViewModel($forum, 'Edit', $currentUser);
+
+    $model->validate();
     if (!ForumDB::isForumValid($forum)) {
         $errors = 'A forum with that name already exists.';
     }
 
-    if (count($errors) > 0) {
-        $model = new EditForumViewModel($forum, 'Edit', $currentUser);
+    if (!$model->isValid()) {
         include('./views/admin/editForum.php');
         exit();
     }

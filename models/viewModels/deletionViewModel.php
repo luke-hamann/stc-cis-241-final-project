@@ -1,4 +1,8 @@
 <?php
+/**
+ * Title: Deletion View Model
+ * Purpose: To provide a view model for arbitary deletion forms
+ */
 class DeletionViewModel {
     public $id;
     public $summary;
@@ -6,6 +10,9 @@ class DeletionViewModel {
     public $cancelUrl;
     public $currentUser;
 
+    /**
+     * Construct the view model
+     */
     public function __construct($id, $summary, $formActionStub, $cancelUrl, $currentUser) {
         $this->id = $id;
         $this->summary = $summary;

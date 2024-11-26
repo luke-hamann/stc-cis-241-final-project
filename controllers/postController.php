@@ -24,8 +24,8 @@ if ($action == 'new' && $isGet) {
  */
 if ($action == 'new' && $isPost) {
     checkLoggedIn($currentUser);
-
-    $model = new EditPostViewModel('Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
+    $model = new EditPostViewModel(
+        'Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
 
     if (!$model->isValid()) {
         $errors = $model->getErrors();
@@ -45,7 +45,8 @@ if ($action == 'editPost' && $isGet) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
-    $model = new EditPostViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
+    $model = new EditPostViewModel(
+        'Edit', $post, ForumDB::getForums(), $currentUser);
     include('./views/home/editPost.php');
     exit();
 }
@@ -60,9 +61,10 @@ if ($action == 'editPost' && $isPost) {
     $post = Post::fromArray($_POST);
     $post->id = $id;
     $post->userId = $currentUser->id;
-    if (!$post->isValid()) {
-        $model = new EditPostViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
-        $errors = $post->getErrors();
+
+    $model = new EditPostViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
+    $model->validate();
+    if (!$model->isValid()) {
         include('./views/home/editPost.php');
         exit();
     }
@@ -108,13 +110,14 @@ if ($action == 'post' && $isPost) {
     $id = FILTER_INPUT(INPUT_POST, 'postId', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);
     $comment = Comment::fromArray($_POST);
-    if (!$comment->isValid()) {
-        $model = new PostViewModel($post, $currentUser);
+    $comment->userId = $currentUser->id;
+    $model = new PostViewModel($post, $currentUser);
+    $model->validate();
+    if (!$model->isValid()) {
         include('./views/home/post.php');
         exit();
     }
 
-    $comment->userId = $currentUser->id;
     CommentDB::addComment($comment);
     header('Location: ?action=post&id=' . $comment->postId);
 }
@@ -140,10 +143,10 @@ if ($action == 'editComment' && $isPost) {
     $comment = getOwnedObjectOr404('comment', $id, $currentUser);
     $content = FILTER_INPUT(INPUT_POST, 'content');
     $comment->content = $content;
+    $model = new EditCommentViewModel($comment, $currentUser);
 
-    if (!$comment->isValid()) {
-        $model = new EditCommentViewModel($comment, $currentUser);
-        $errors = $comment->getErrors();
+    $model->validate();
+    if (!$model->isValid()) {
         include('./views/home/editComment.php');
         exit();
     }

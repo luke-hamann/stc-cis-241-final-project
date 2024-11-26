@@ -1,13 +1,30 @@
 <?php
-class EditForumViewModel {
+/**
+ * Title: Edit Forum View Model
+ * Purpose: To provide a model for editing forms 
+ */
+
+require_once('./models/viewModels/_formViewModel.php');
+
+class EditForumViewModel extends FormViewModel {
     public $forum;
     public $mode;
     public $currentUser;
 
+    /**
+     * Construct the view model
+     */
     public function __construct($forum, $mode, $currentUser) {
         $this->forum = $forum;
         $this->mode = $mode;
         $this->currentUser = $currentUser;
+    }
+
+    /**
+     * Validate the view model by validating the contained forum object
+     */
+    public function validate() {
+        $this->_errors = $this->forum->getErrors();
     }
 }
 ?>

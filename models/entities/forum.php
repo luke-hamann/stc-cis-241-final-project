@@ -1,17 +1,25 @@
 <?php
+/**
+ * Title: Forum Model
+ * Purpose: To represent a forum on the site
+ */
 class Forum {
     public $id;
     public $name;
     public $posts;
 
-    private static $namePattern = '/^[a-z\d_-]{1,32}$/';
-
+    /**
+     * Construct a comment object
+     */
     public function __construct(int $id, string $name, array $posts) {
         $this->id = $id;
         $this->name = $name;
         $this->posts = $posts;
     }
 
+    /**
+     * Construct a comment object based on an associative array
+     */
     public static function fromArray(array $array) {
         if (array_key_exists('id', $array)) {
             $id = (int)$array['id'];
@@ -28,10 +36,13 @@ class Forum {
         return new Forum($id, $name, []);
     }
 
+    /**
+     * Validate the forum object and generate error messages if applicable
+     */
     public function getErrors() {
         $errors = [];
 
-        if (preg_match(self::$namePattern, $this->name) !== 1) {
+        if (preg_match('/^[a-z\d_-]{1,32}$/', $this->name) !== 1) {
             $errors[] = 'Forum name must be 1 to 32 characters and contain only lowercase letters, numbers, hyphens, and underscores.';
         }
 
