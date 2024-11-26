@@ -56,6 +56,9 @@ function getObjectOr404($type, $id) {
         case 'forum':
             $object = ForumDB::getForum($id);
             break;
+        case 'user':
+            $object = UserDB::getUser($id);
+            break;
         case 'post':
             $object = PostDB::getPost($id);
             break;
@@ -74,7 +77,8 @@ function getObjectOr404($type, $id) {
 }
 
 /**
- * 
+ * Attempt to get an object of a type and id owned by a specific user
+ * and return a 404 if not found
  */
 function getOwnedObjectOr404($type, $id, $currentUser) {
     $object = getObjectOr404($type, $id);
