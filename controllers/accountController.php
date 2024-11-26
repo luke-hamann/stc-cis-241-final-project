@@ -8,18 +8,9 @@ require_once('./models/viewModels/LoginViewModel.php');
 require_once('./models/viewModels/RegisterViewModel.php');
 
 /**
- * Redirect the user to home if they are already logged in
- */
-function sendHomeIfLoggedIn($currentUser) {
-    if (isset($currentUser)) {
-        header('Location: .');
-    }
-}
-
-/**
  * Display the login form
  */
-if ($action == 'login' && $isGet) {
+if ($action == 'login' && $isGetRequest) {
     sendHomeIfLoggedIn($currentUser);
     $model = new LoginViewModel('', '', $currentUser);
     include('./views/account/login.php');
@@ -29,7 +20,7 @@ if ($action == 'login' && $isGet) {
 /**
  * Accept form data for logging in
  */
-if ($action == 'login' && $isPost) {
+if ($action == 'login' && $isPostRequest) {
     sendHomeIfLoggedIn($currentUser);
 
     $model = LoginViewModel::fromArray($_POST);
@@ -53,7 +44,7 @@ if ($action == 'login' && $isPost) {
 /**
  * Display the registration form
  */
-if ($action == 'register' && $isGet) {
+if ($action == 'register' && $isGetRequest) {
     sendHomeIfLoggedIn($currentUser);
     $model = new RegisterViewModel('', '', '');
     include('./views/account/register.php');
@@ -63,7 +54,7 @@ if ($action == 'register' && $isGet) {
 /**
  * Accept form data for registering
  */
-if ($action == 'register' && $isPost) {
+if ($action == 'register' && $isPostRequest) {
     sendHomeIfLoggedIn($currentUser);
     $model = RegisterViewModel::fromArray($_POST);
     $model->validate();
@@ -84,7 +75,7 @@ if ($action == 'register' && $isPost) {
 /**
  * Process logout attempts
  */
-if ($action == 'logout' && $isPost) {
+if ($action == 'logout' && $isPostRequest) {
     $_SESSION = array();
     session_destroy();
     header('Location: .');

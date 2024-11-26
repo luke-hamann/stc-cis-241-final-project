@@ -9,7 +9,7 @@ require_once('./models/viewModels/deletionViewModel.php');
 /**
  * Display a form for creating a forum
  */
-if ($action == 'addForum' && $isGet) {
+if ($action == 'addForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $model = new EditForumViewModel(null, 'Add', $currentUser);
     include('./views/admin/editForum.php');
@@ -19,7 +19,7 @@ if ($action == 'addForum' && $isGet) {
 /**
  * Accept form data for creating a forum
  */
-if ($action == 'addForum' && $isPost) {
+if ($action == 'addForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $forum = Forum::fromArray($_POST);
     $model = new EditForumViewModel($forum, 'Add', $currentUser);
@@ -39,7 +39,7 @@ if ($action == 'addForum' && $isPost) {
 /**
  * Display a form for editing a forum
  */
-if ($action == 'editForum' && $isGet) {
+if ($action == 'editForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $forum = getObjectOr404('forum', $id);
@@ -51,7 +51,7 @@ if ($action == 'editForum' && $isGet) {
 /**
  * Accept form data for editing a forum
  */
-if ($action == 'editForum' && $isPost) {
+if ($action == 'editForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     getObjectOr404('forum', $id);
@@ -75,7 +75,7 @@ if ($action == 'editForum' && $isPost) {
 /**
  * Display a form to confirm the deletion of a forum
  */
-if ($action == 'deleteForum' && $isGet) {
+if ($action == 'deleteForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $forum = getObjectOr404('forum', $id);
@@ -95,7 +95,7 @@ if ($action == 'deleteForum' && $isGet) {
 /**
  * Accept form data to confirm the deletion of a forum
  */
-if ($action == 'deleteForum' && $isPost) {
+if ($action == 'deleteForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $forum = getObjectOr404('forum', $id);
@@ -106,7 +106,7 @@ if ($action == 'deleteForum' && $isPost) {
 /**
  * Display a form to confirm the deletion of a thread
  */
-if ($action == 'deleteThread' && $isGet) {
+if ($action == 'deleteThread' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);
@@ -126,7 +126,7 @@ if ($action == 'deleteThread' && $isGet) {
 /**
  * Accept form data to confirm the deletion of a thread
  */
-if ($action == 'deleteThread' && $isPost) {
+if ($action == 'deleteThread' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);

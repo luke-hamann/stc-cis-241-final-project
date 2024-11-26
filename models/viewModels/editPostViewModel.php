@@ -26,6 +26,6 @@ class EditPostViewModel extends FormViewModel {
      * Validate the view model based on the contained post object
      */
     public function validate() {
-        $this->_errors = $post->getErrors();
+        $this->_errors = $this->post->getErrors();
     }
 }

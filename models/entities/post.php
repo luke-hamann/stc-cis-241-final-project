@@ -4,14 +4,14 @@
  * Purpose: To represent a post on the site
  */
 class Post {
-    public int $id;
-    public string $title;
-    public string $content;
-    public DateTime $creationDate;
-    public int $userId;
-    public User $user;
-    public int $forumId;
-    public Forum $forum;
+    public $id;
+    public $title;
+    public $content;
+    public $creationDate;
+    public $userId;
+    public $user;
+    public $forumId;
+    public $forum;
     public $comments;
 
     private static $titlePattern = '/^[^\n]{1,128}$/';

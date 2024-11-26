@@ -12,7 +12,7 @@ require_once('./models/viewModels/deletionViewModel.php');
 /**
  * Display a form for creating a new post
  */
-if ($action == 'new' && $isGet) {
+if ($action == 'new' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $model = new EditPostViewModel('Add', null, ForumDB::getForums(), $currentUser);
     include('./views/home/editPost.php');
@@ -22,7 +22,7 @@ if ($action == 'new' && $isGet) {
 /**
  * Accept form data for publishing a new post
  */
-if ($action == 'new' && $isPost) {
+if ($action == 'new' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $model = new EditPostViewModel(
         'Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
@@ -41,7 +41,7 @@ if ($action == 'new' && $isPost) {
 /**
  * Display a form for editing a post
  */
-if ($action == 'editPost' && $isGet) {
+if ($action == 'editPost' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
@@ -54,10 +54,10 @@ if ($action == 'editPost' && $isGet) {
 /**
  * Accept form data for editing a post
  */
-if ($action == 'editPost' && $isPost) {
+if ($action == 'editPost' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $post = getOwnedObjectOr404('post', $id, $currentUser);
+    getOwnedObjectOr404('post', $id, $currentUser);
     $post = Post::fromArray($_POST);
     $post->id = $id;
     $post->userId = $currentUser->id;
@@ -75,7 +75,7 @@ if ($action == 'editPost' && $isPost) {
 /**
  * Display a form for confirming the deletion of a post
  */
-if ($action == 'deletePost' && $isGet) {
+if ($action == 'deletePost' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
@@ -93,7 +93,7 @@ if ($action == 'deletePost' && $isGet) {
 /**
  * Accept form data for confirming the deletion of a post
  */
-if ($action == 'deletePost' && $isPost) {
+if ($action == 'deletePost' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
@@ -104,14 +104,16 @@ if ($action == 'deletePost' && $isPost) {
 /**
  * Accept form data for publishing a new comment
  */
-if ($action == 'post' && $isPost) {
+if ($action == 'post' && $isPostRequest) {
     checkLoggedIn($currentUser);
 
     $id = FILTER_INPUT(INPUT_POST, 'postId', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);
+
     $comment = Comment::fromArray($_POST);
     $comment->userId = $currentUser->id;
-    $model = new PostViewModel($post, $currentUser);
+
+    $model = new PostViewModel($post, $currentUser, $comment);
     $model->validate();
     if (!$model->isValid()) {
         include('./views/home/post.php');
@@ -125,7 +127,7 @@ if ($action == 'post' && $isPost) {
 /**
  * Display a form for editing a comment
  */
-if ($action == 'editComment' && $isGet) {
+if ($action == 'editComment' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $comment = getObjectOr404('comment', $id);
@@ -137,7 +139,7 @@ if ($action == 'editComment' && $isGet) {
 /**
  * Accept form data for editing a comment
  */
-if ($action == 'editComment' && $isPost) {
+if ($action == 'editComment' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $comment = getOwnedObjectOr404('comment', $id, $currentUser);
@@ -158,7 +160,7 @@ if ($action == 'editComment' && $isPost) {
 /**
  * Display a form to confirm the deletion of a comment
  */
-if ($action == 'deleteComment' && $isGet) {
+if ($action == 'deleteComment' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $comment = getOwnedObjectOr404('comment', $id, $currentUser);
@@ -176,7 +178,7 @@ if ($action == 'deleteComment' && $isGet) {
 /**
  * Accept form data to accept deletion of a comment
  */
-if ($action == 'deleteComment' && $isPost) {
+if ($action == 'deleteComment' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $comment = getOwnedObjectOr404('comment', $id, $currentUser);

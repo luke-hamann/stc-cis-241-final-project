@@ -4,12 +4,12 @@
  * Purpose: To represent a comment on a post
  */
 class Comment {
-    public int $id;
-    public string $content;
-    public DateTime $creationDate;
-    public int $postId;
-    public int $userId;
-    public User $user;
+    public $id;
+    public $content;
+    public $creationDate;
+    public $postId;
+    public $userId;
+    public $user;
 
     /**
      * Construct a comment object

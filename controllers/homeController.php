@@ -11,7 +11,7 @@ require_once('./models/viewModels/postViewModel.php');
 /**
  * Display the home page with recent posts from all forums
  */
-if ($action == 'home' && $isGet) {
+if ($action == 'home' && $isGetRequest) {
     $model = new HomeViewModel(PostDB::getRecentPosts(), $currentUser);
     include('./views/home/home.php');
     exit();
@@ -20,7 +20,7 @@ if ($action == 'home' && $isGet) {
 /**
  * Display the list of all forums
  */
-if ($action == 'forums' && $isGet) {
+if ($action == 'forums' && $isGetRequest) {
     $model = new ForumsViewModel(ForumDB::getForums(), $currentUser);
     include('./views/home/forums.php');
     exit();
@@ -29,7 +29,7 @@ if ($action == 'forums' && $isGet) {
 /**
  * Display posts within a given forum
  */
-if ($action == 'forum' && $isGet) {
+if ($action == 'forum' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $forum = getObjectOr404('forum', $id);
     $model = new ForumViewModel($forum, $currentUser);
@@ -40,10 +40,10 @@ if ($action == 'forum' && $isGet) {
 /**
  * Display a given post with its comments
  */
-if ($action == 'post' && $isGet) {
+if ($action == 'post' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);
-    $model = new PostViewModel($post, $currentUser);
+    $model = new PostViewModel($post, $currentUser, null);
     include('./views/home/post.php');
     exit();
 }

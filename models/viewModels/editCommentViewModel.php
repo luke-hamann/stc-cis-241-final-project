@@ -22,7 +22,7 @@ class EditCommentViewModel extends FormViewModel {
      * Validate the view model by validating the contained comment object
      */
     public function validate() {
-        $this->_errors = $comment->getErrors();
+        $this->_errors = $this->comment->getErrors();
     }
 }
 ?>

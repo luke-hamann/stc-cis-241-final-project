@@ -11,7 +11,7 @@ class Forum {
     /**
      * Construct a comment object
      */
-    public function __construct(int $id, string $name, array $posts) {
+    public function __construct($id, $name, $posts) {
         $this->id = $id;
         $this->name = $name;
         $this->posts = $posts;

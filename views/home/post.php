@@ -6,6 +6,7 @@
 
 <?php if (isset($currentUser)) : ?>
     <form action="?action=post" method="post">
+        <?php include('./views/shared/formErrors.php'); ?>
         <input type="hidden" name="postId" value="<?php echo $post->id; ?>" />
         <div>
             <textarea name="content"><?php
