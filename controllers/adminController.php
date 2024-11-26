@@ -3,8 +3,8 @@
  * Title: Admin Controller
  */
 
-require_once('./models/editForumViewModel.php');
-require_once('./models/deletionViewModel.php');
+require_once('./models/viewModels/editForumViewModel.php');
+require_once('./models/viewModels/deletionViewModel.php');
 
 /**
  * Display a form for creating a forum

@@ -4,8 +4,8 @@
  * Purpose: To manage user sessions, including logins, logouts, and registrations
  */
 
-require_once('./models/LoginViewModel.php');
-require_once('./models/RegisterViewModel.php');
+require_once('./models/viewModels/LoginViewModel.php');
+require_once('./models/viewModels/RegisterViewModel.php');
 
 /**
  * Redirect the user to home if they are already logged in

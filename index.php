@@ -3,15 +3,15 @@
  * Title: Main Controller
  */
 
-require_once('models/forum.php');
-require_once('models/user.php');
-require_once('models/post.php');
-require_once('models/comment.php');
-require_once('models/database.php');
-require_once('models/forumDB.php');
-require_once('models/userDB.php');
-require_once('models/postDB.php');
-require_once('models/commentDB.php');
+require_once('models/entities/forum.php');
+require_once('models/entities/user.php');
+require_once('models/entities/post.php');
+require_once('models/entities/comment.php');
+require_once('models/databases/_database.php');
+require_once('models/databases/forumDB.php');
+require_once('models/databases/userDB.php');
+require_once('models/databases/postDB.php');
+require_once('models/databases/commentDB.php');
 
 /**
  * Return a 404 Not Found Page

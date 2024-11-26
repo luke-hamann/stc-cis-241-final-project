@@ -1,5 +1,13 @@
 <?php
+/**
+ * Title: Comment Database
+ * Purpose: To view, add, update, and delete comments
+ */
 class CommentDB {
+
+    /**
+     * Get a comment by its id
+     */
     public static function getComment(int $id) {
         $db = Database::getDB();
         $query = '
@@ -34,6 +42,9 @@ class CommentDB {
         );
     }
 
+    /**
+     * Get all comments associated with a given post
+     */
     public static function getPostComments(int $postId) {
         $db = Database::getDB();
         $query = '
@@ -73,6 +84,9 @@ class CommentDB {
         return $comments;
     }
 
+    /**
+     * Add a comment
+     */
     public static function addComment(Comment $comment) {
         $db = Database::getDB();
         $query = '
@@ -87,6 +101,9 @@ class CommentDB {
         $statement->closeCursor();
     }
 
+    /**
+     * Update a comment
+     */
     public static function updateComment(Comment $comment) {
         $db = Database::getDB();
         $query = '
@@ -101,6 +118,9 @@ class CommentDB {
         $statement->closeCursor();
     }
 
+    /**
+     * Delete a comment
+     */
     public static function deleteComment(int $id) {
         $db = Database::getDB();
         $query = '

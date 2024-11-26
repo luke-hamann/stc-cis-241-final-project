@@ -1,6 +1,6 @@
-<?php if (isset($errors)) : ?>
+<?php if (isset($model->errors) && count($model->errors) > 0) : ?>
     <ul>
-        <?php foreach ($errors as $error) : ?>
+        <?php foreach ($model->errors as $error) : ?>
             <li>
                 <?php echo htmlspecialchars($error); ?>
             </li>

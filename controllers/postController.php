@@ -4,10 +4,10 @@
  * Purpose: To view, add, update, and delete posts and comments
  */
 
-require_once('./models/postViewModel.php');
-require_once('./models/editPostViewModel.php');
-require_once('./models/editCommentViewModel.php');
-require_once('./models/deletionViewModel.php');
+require_once('./models/viewModels/postViewModel.php');
+require_once('./models/viewModels/editPostViewModel.php');
+require_once('./models/viewModels/editCommentViewModel.php');
+require_once('./models/viewModels/deletionViewModel.php');
 
 /**
  * Display a form for creating a new post

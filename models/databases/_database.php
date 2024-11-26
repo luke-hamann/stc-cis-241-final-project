@@ -1,4 +1,8 @@
 <?php
+/**
+ * Title: Database Model
+ * Purpose: To provide a connection to the database
+ */
 class Database {
     private static $dsn = 'mysql:host=localhost;dbname=forumSite';
     private static $username = 'forumSite';

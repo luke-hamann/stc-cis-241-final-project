@@ -3,10 +3,10 @@
  * Title: Home Controller
  */
 
-require_once('./models/homeViewModel.php');
-require_once('./models/forumsViewModel.php');
-require_once('./models/forumViewModel.php');
-require_once('./models/postViewModel.php');
+require_once('./models/viewModels/homeViewModel.php');
+require_once('./models/viewModels/forumsViewModel.php');
+require_once('./models/viewModels/forumViewModel.php');
+require_once('./models/viewModels/postViewModel.php');
 
 /**
  * Display the home page with recent posts from all forums
