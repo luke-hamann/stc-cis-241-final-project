@@ -9,7 +9,8 @@
         <a href="?action=forum&id=<?php echo $post->forumId; ?>"><?php
             echo htmlspecialchars($post->forum->name); ?></a>
         by
-        <?php echo htmlspecialchars($post->user->name); ?>
+        <a href="?action=user&id=<?php echo $post->user->id; ?>"><?php
+            echo htmlspecialchars($post->user->name); ?></a>
         on
         <?php echo $post->creationDate->format(DATE_RFC7231); ?>
     </p>

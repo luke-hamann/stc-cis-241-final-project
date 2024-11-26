@@ -22,9 +22,19 @@
                         Forums
                     </a>
                 </li>
+                <li>
+                    <a href="?action=users">
+                        Users
+                    </a>
+                </li>
                 <?php if (isset($model->currentUser)) : ?>
                     <li>
-                        Logged in as <?php echo htmlspecialchars($model->currentUser->name); ?>
+                        Logged in as
+                        <a href="?action=user&id=<?php echo $model->currentUser->id; ?>"><?php
+                            echo htmlspecialchars($model->currentUser->name); ?></a>
+                    </li>
+                    <li>
+                        <a href="?action=password">Change password</a>
                     </li>
                     <li>
                         <form action="?action=logout" method="post">
