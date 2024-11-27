@@ -1,7 +1,11 @@
 <div class="post-component p-2">
     <h2>
         <a href="?action=post&id=<?php echo $post->id; ?>">
-            <?php echo htmlspecialchars($post->title); ?>
+            <?php if ($post->isDeleted) : ?>
+                [deleted]
+            <?php else : ?>
+                <?php echo htmlspecialchars($post->title); ?>
+            <?php endif; ?>
         </a>
     </h2>
     <p>
@@ -25,16 +29,28 @@
                     class="btn btn-warning">Edit</a>
             <?php endif; ?>
             <?php if ($post->userId == $currentUser->id || $currentUser->isAdmin) : ?>
-                <a href="?action=deletePost&id=<?php echo $post->id; ?>"
-                    class="btn btn-danger">Mark as deleted</a>
+                <form action="?action=deletePost&id=<?php echo $post->id; ?>" method="post"
+                    class="d-inline">
+                    <?php if ($post->isDeleted) : ?>
+                        <input type="submit" value="Undelete Post"
+                            class="btn btn-primary" />
+                    <?php else : ?>
+                        <input type="submit" value="Delete Post"
+                            class="btn btn-danger" />
+                    <?php endif; ?>
+                </form>
             <?php endif; ?>
             <?php if ($currentUser->isAdmin) : ?>
                 <a href="?action=deleteThread&id=<?php echo $post->id; ?>"
-                    class="btn btn-danger">Delete thread</a>
+                    class="btn btn-danger">Delete Thread</a>
             <?php endif; ?>
         </div>
     <?php endif; ?>
     <p>
-        <?php echo nl2br(htmlspecialchars($post->content)); ?>
+        <?php if ($post->isDeleted) : ?>
+            [deleted]
+        <?php else : ?>
+            <?php echo nl2br(htmlspecialchars($post->content)); ?>
+        <?php endif; ?>
     </p>
 </div>

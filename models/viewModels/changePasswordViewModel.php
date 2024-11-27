@@ -93,7 +93,8 @@ class ChangePasswordViewModel extends FormViewModel {
             $this->currentUser->id,
             $this->currentUser->name,
             $this->passwordNew,
-            $this->currentUser->isAdmin
+            $this->currentUser->isAdmin,
+            $this->currentUser->isGhost
         );
     }
 }

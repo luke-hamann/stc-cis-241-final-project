@@ -21,8 +21,8 @@
                             <input type="hidden" name="id" value="<?php echo $user->id; ?>" />
                             <input type="submit" value="Reset Password" class="btn btn-warning" />
                             <input type="checkbox" name="confirm"
-                                id="confirm-<?php echo $user->id; ?>"/>
-                            <label for="confirm-<?php echo $user->id; ?>">
+                                id="confirm-reset-<?php echo $user->id; ?>"/>
+                            <label for="confirm-reset-<?php echo $user->id; ?>">
                                 Confirm
                             </label>
                         </form>

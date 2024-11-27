@@ -85,7 +85,7 @@ class RegisterViewModel extends FormViewModel {
      * Create a user object based on the registration form
      */
     public function getUser() {
-        return new User(0, $this->name, $this->password);
+        return new User(0, $this->name, $this->password, false);
     }
 }
 ?>

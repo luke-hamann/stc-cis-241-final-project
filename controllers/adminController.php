@@ -131,7 +131,7 @@ if ($action == 'deleteThread' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);
-    PostDB::deletePost($post, true);
+    PostDB::deletePost($post);
     header('Location: ?action=forum&id=' . $post->forumId);
 }
 

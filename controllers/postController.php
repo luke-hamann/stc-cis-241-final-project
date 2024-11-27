@@ -73,32 +73,14 @@ if ($action == 'editPost' && $isPostRequest) {
 }
 
 /**
- * Display a form for confirming the deletion of a post
- */
-if ($action == 'deletePost' && $isGetRequest) {
-    checkLoggedIn($currentUser);
-    $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $post = getOwnedObjectOr404('post', $id, $currentUser);
-    $model = new DeletionViewModel(
-        $post->id,
-        $post->title,
-        '?action=deletePost&id=',
-        '?action=post&id=' . $post->id,
-        $currentUser
-    );
-    include('./views/shared/deleteObject.php');
-    exit();
-}
-
-/**
  * Accept form data for confirming the deletion of a post
  */
 if ($action == 'deletePost' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
-    PostDB::deletePost($post);
-    header('Location: ?action=forum&id=' . $post->forumId);
+    PostDB::toggleDeletedPost($post);
+    header('Location: ?action=post&id=' . $post->id);
 }
 
 /**

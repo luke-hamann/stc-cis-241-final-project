@@ -25,7 +25,8 @@ class PostDB {
                 $user,
                 $row['forumId'],
                 $forum,
-                []
+                [],
+                $row['isDeleted']
             );
             $posts[] = $post;
         }
@@ -44,6 +45,7 @@ class PostDB {
                 Posts.title,
                 Posts.content,
                 Posts.creationDate,
+                Posts.isDeleted,
                 Users.id userId,
                 Users.name userName,
                 Users.isAdmin userIsAdmin,
@@ -76,6 +78,7 @@ class PostDB {
                 Posts.title,
                 Posts.content,
                 Posts.creationDate,
+                Posts.isDeleted,
                 Users.id userId,
                 Users.name userName,
                 Users.isAdmin userIsAdmin,
@@ -105,6 +108,7 @@ class PostDB {
                 Posts.title,
                 Posts.content,
                 Posts.creationDate,
+                Posts.isDeleted,
                 Users.id userId,
                 Users.name userName,
                 Users.isAdmin userIsAdmin,
@@ -132,7 +136,7 @@ class PostDB {
     public static function getPost(int $id) {
         $db = Database::getDB();
         $query = '
-            SELECT id, title, content, creationDate, userId, forumId
+            SELECT id, title, content, creationDate, userId, forumId, isDeleted
             FROM Posts
             WHERE id = :id
         ';
@@ -154,7 +158,8 @@ class PostDB {
             UserDB::getUser($row['userId']),
             $row['forumId'],
             ForumDB::getForum($row['forumId']),
-            CommentDB::getPostComments($id)
+            CommentDB::getPostComments($id),
+            $row['isDeleted']
         );
     }
 
@@ -164,8 +169,8 @@ class PostDB {
     public static function addPost(Post $post) {
         $db = Database::getDB();
         $query = '
-            INSERT INTO Posts (title, content, userId, forumId)
-            VALUES (:title, :content, :userId, :forumId)
+            INSERT INTO Posts (title, content, userId, forumId, isDeleted)
+            VALUES (:title, :content, :userId, :forumId, FALSE)
         ';
         $statement = $db->prepare($query);
         $statement->bindValue(':title', $post->title);
@@ -184,7 +189,11 @@ class PostDB {
         $db = Database::getDB();
         $query = '
             UPDATE Posts
-            SET title = :title, content = :content, userId = :userId, forumId = :forumId
+            SET title = :title,
+                content = :content,
+                userId = :userId,
+                forumId = :forumId,
+                isDeleted = :isDeleted
             WHERE id = :id
         ';
         $statement = $db->prepare($query);
@@ -192,6 +201,23 @@ class PostDB {
         $statement->bindValue(':content', $post->content);
         $statement->bindValue(':userId', $post->userId);
         $statement->bindValue(':forumId', $post->forumId);
+        $statement->bindValue(':isDeleted', $post->isDeleted);
+        $statement->bindValue(':id', $post->id);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    /**
+     * Toggle whether a post is marked as deleted
+     */
+    public static function toggleDeletedPost(Post $post) {
+        $db = Database::getDB();
+        $query = '
+            UPDATE Posts
+            SET isDeleted = NOT isDeleted
+            WHERE id = :id
+        ';
+        $statement = $db->prepare($query);
         $statement->bindValue(':id', $post->id);
         $statement->execute();
         $statement->closeCursor();
@@ -200,21 +226,12 @@ class PostDB {
     /**
      * Delete a post
      */
-    public static function deletePost(Post $post, bool $deleteThread = false) {
+    public static function deletePost(Post $post) {
         $db = Database::getDB();
-
-        if ($deleteThread) {
-            $query = '
-                DELETE FROM Posts WHERE id = :id
-            ';
-        } else {
-            $query = '
-            UPDATE Posts
-            SET title = \'[deleted]\', content = \'[deleted]\'
+        $query = '
+            DELETE FROM Posts
             WHERE id = :id
         ';
-        }
-
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $post->id);
         $statement->execute();

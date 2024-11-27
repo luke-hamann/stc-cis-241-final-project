@@ -13,6 +13,7 @@ class Post {
     public $forumId;
     public $forum;
     public $comments;
+    public $isDeleted;
 
     private static $titlePattern = '/^[^\n]{1,128}$/';
     private static $contentPattern = '/^.{1,1024}$/';
@@ -20,7 +21,7 @@ class Post {
     /**
      * Construct a post object
      */
-    public function __construct($id, $title, $content, $creationDate, $userId, $user, $forumId, $forum, $comments) {
+    public function __construct($id, $title, $content, $creationDate, $userId, $user, $forumId, $forum, $comments, $isDeleted) {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
@@ -30,6 +31,7 @@ class Post {
         $this->forumId = $forumId;
         $this->forum = $forum;
         $this->comments = $comments;
+        $this->isDeleted = $isDeleted;
     }
 
     /**
@@ -69,7 +71,8 @@ class Post {
             null,
             $forumId,
             null,
-            []
+            [],
+            false
         );
     }
 
