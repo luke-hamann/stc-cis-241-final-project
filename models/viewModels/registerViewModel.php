@@ -11,15 +11,10 @@ class RegisterViewModel extends FormViewModel {
     public $password;
     public $passwordConfirm;
 
-    private static $namePattern =
-        '/^[\d[:lower:]\-_]+$/';
-    private static $passwordPattern =
-        '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)()[^\n]{8,}$/';
-
     /**
      * Construct the view model
      */
-    private function __construct(string $name, string $password, string $passwordConfirm) {
+    public function __construct(string $name, string $password, string $passwordConfirm) {
         $this->name = $name;
         $this->password = $password;
         $this->passwordConfirm = $passwordConfirm;
@@ -55,27 +50,40 @@ class RegisterViewModel extends FormViewModel {
         $this->_errors = [];
 
         if ($this->name == '') {
-            $this->errors[] = 'Please enter a name.';
-        } else if (preg_match(self::$namePattern, $this->name) !== 1) {
-            $this->errors[] = 'Names must contain only numbers, lowercase letters, ' .
-                'hyphens, and underscores.';
+            $this->_errors[] = 'Please enter a name.';
+        } else {
+            $nameError = User::isValidName($this->name);
+            if ($nameError != '') {
+                $this->_errors[] = $nameError;
+            }
         }
 
-        $badPassword = false;
-        if (preg_match(self::$passwordPattern, $this->password) !== 1) {
-            $this->errors[] = 'Password be at least 8 character long and ' .
-                'contain at least one number, one lowercase letter, ' .
-                'one uppercase letter, and one special character.';
-            $badPassword = true;
+        $goodPasswords = true;
+        if ($this->password == '') {
+            $goodPasswords = false;
+            $this->_errors[] = 'Please enter a password.';
         }
 
         if ($this->passwordConfirm == '') {
-            $this->errors[] = 'Please confirm your password.';
-        } else if (!$badPassword && ($this->password != $this->passwordConfirm)) {
-            $this->errors[] = 'Passwords do not match.';
+            $goodPasswords = false;
+            $this->_errors[] = 'Please confirm your password.';
+        }
+
+        if ($goodPasswords) {
+            if ($this->password != $this->passwordConfirm) {
+                $this->_errors[] = 'Passwords do not match.';
+            } else {
+                $passwordError = User::isStrongPassword($this->password);
+                if ($passwordError != '') {
+                    $this->_errors[] = $passwordError;
+                }
+            }
         }
     }
     
+    /**
+     * Create a user object based on the registration form
+     */
     public function getUser() {
         return new User(0, $this->name, $this->password);
     }

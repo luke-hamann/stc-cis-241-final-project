@@ -1,11 +1,12 @@
 <?php
 /**
  * Title: Account Controller
- * Purpose: To manage user sessions, including logins, logouts, and registrations
+ * Purpose: To manage logins, logouts, registrations, and password changes
  */
 
-require_once('./models/viewModels/LoginViewModel.php');
-require_once('./models/viewModels/RegisterViewModel.php');
+require_once('./models/viewModels/loginViewModel.php');
+require_once('./models/viewModels/registerViewModel.php');
+require_once('./models/viewModels/changePasswordViewModel.php');
 
 /**
  * Display the login form
@@ -79,6 +80,33 @@ if ($action == 'logout' && $isPostRequest) {
     $_SESSION = array();
     session_destroy();
     header('Location: .');
+}
+
+/**
+ * Display the change password form
+ */
+if ($action == 'password' && $isGetRequest) {
+    checkLoggedIn($currentUser);
+    $model = new ChangePasswordViewModel('', '', '', $currentUser);
+    include('./views/account/changePassword.php');
+    exit();
+}
+
+/**
+ * Accept form data to change passwords
+ */
+if ($action == 'password' && $isPostRequest) {
+    checkLoggedIn($currentUser);
+    $model = ChangePasswordViewModel::fromArray($_POST);
+    $model->currentUser = $currentUser;
+    $model->validate();
+    if (!$model->isValid()) {
+        include('./views/account/changePassword.php');
+        exit();
+    }
+
+    UserDB::updateUserPassword($model->getUser());
+    header('Location: ?action=user&id=' . $currentUser->id);
 }
 
 ?>

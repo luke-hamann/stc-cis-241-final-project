@@ -18,4 +18,25 @@ class User {
         $this->password = $password;
         $this->admin = $admin;
     }
+
+    public static function isValidName(string $name) {
+        $namePattern = '/^[\d[:lower:]\-_]+$/';
+        $error = '';
+        if (preg_match($namePattern, $name) !== 1) {
+            $error = 'Names must contain only numbers,' .
+            'lowercase letters, hyphens, and underscores.';
+        }
+        return $error;
+    }
+
+    public static function isStrongPassword(string $password) {
+        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)()[^\n]{8,}$/';
+        $error = '';
+        if (preg_match($passwordPattern, $password) !== 1) {
+            $error = 'Password be at least 8 character long and ' .
+                'contain at least one number, one lowercase letter, ' .
+                'one uppercase letter, and one special character.';
+        }
+        return $error;
+    }
 }
