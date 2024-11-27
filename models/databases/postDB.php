@@ -8,7 +8,13 @@ class PostDB {
     private static function convertRowsToPosts($rows) {
         $posts = array();
         foreach ($rows as $row) {
-            $user = new User($row['userId'], $row['userName'], '', $row['userAdmin']);
+            $user = new User(
+                $row['userId'],
+                $row['userName'],
+                '',
+                $row['userIsAdmin'],
+                $row['userIsGhost']
+            );
             $forum = new Forum($row['forumId'], $row['forumName'], []);
             $post = new Post(
                 $row['id'],
@@ -40,7 +46,8 @@ class PostDB {
                 Posts.creationDate,
                 Users.id userId,
                 Users.name userName,
-                Users.admin userAdmin,
+                Users.isAdmin userIsAdmin,
+                Users.isGhost userIsGhost,
                 Forums.id forumId,
                 Forums.name forumName
             FROM Posts
@@ -71,7 +78,8 @@ class PostDB {
                 Posts.creationDate,
                 Users.id userId,
                 Users.name userName,
-                Users.admin userAdmin,
+                Users.isAdmin userIsAdmin,
+                Users.isGhost userIsGhost,
                 Forums.id forumId,
                 Forums.name forumName
             FROM Posts
@@ -99,7 +107,8 @@ class PostDB {
                 Posts.creationDate,
                 Users.id userId,
                 Users.name userName,
-                Users.admin userAdmin,
+                Users.isAdmin userIsAdmin,
+                Users.isGhost userIsGhost,
                 Forums.id forumId,
                 Forums.name forumName
             FROM Posts
@@ -201,7 +210,7 @@ class PostDB {
         } else {
             $query = '
             UPDATE Posts
-            SET title = \'deleted\', content = \'deleted\'
+            SET title = \'[deleted]\', content = \'[deleted]\'
             WHERE id = :id
         ';
         }

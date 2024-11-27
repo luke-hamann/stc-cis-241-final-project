@@ -8,7 +8,7 @@
 
 <h1>Change Password</h1>
 
-<form action="?action=password" method="post">
+<form action="?action=changePassword" method="post">
     <?php include ('./views/shared/formErrors.php'); ?>
     <div>
         <label for="passwordOld">Old Password</label>

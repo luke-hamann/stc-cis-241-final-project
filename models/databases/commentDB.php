@@ -11,7 +11,13 @@ class CommentDB {
     public static function convertRowsToComments($rows) {
         $comments = array();
         foreach ($rows as $row) {
-            $user = new User($row['userId'], $row['userName'], '', $row['userAdmin']);
+            $user = new User(
+                $row['userId'],
+                $row['userName'],
+                '',
+                $row['userIsAdmin'],
+                $row['userIsGhost']
+            );
             $comment = new Comment(
                 $row['id'],
                 $row['content'],
@@ -39,7 +45,8 @@ class CommentDB {
                 Comments.creationDate,
                 Users.id userId,
                 Users.name userName,
-                Users.admin userAdmin,
+                Users.isAdmin userIsAdmin,
+                Users.isGhost userIsGhost,
                 Posts.id postId
             FROM Comments
                 JOIN Users ON Comments.userId = Users.id
@@ -61,7 +68,13 @@ class CommentDB {
             $row['postId'],
             null,
             $row['userId'],
-            new User($row['userId'], $row['userName'], '', $row['userAdmin'])
+            new User(
+                $row['userId'],
+                $row['userName'],
+                '',
+                $row['userIsAdmin'],
+                $row['userIsGhost']
+            )
         );
     }
 
@@ -77,7 +90,8 @@ class CommentDB {
                 Comments.creationDate,
                 Users.id userId,
                 Users.name userName,
-                Users.admin userAdmin,
+                Users.isAdmin userIsAdmin,
+                Users.isGhost userIsGhost,
                 Posts.id postId
             FROM Comments
                 JOIN Users ON Comments.userId = Users.id
@@ -106,7 +120,8 @@ class CommentDB {
                 Comments.creationDate,
                 Users.id userId,
                 Users.name userName,
-                Users.admin userAdmin,
+                Users.isAdmin userIsAdmin,
+                Users.isGhost userIsGhost,
                 Posts.id postId
             FROM Comments
                 JOIN Users ON Comments.userId = Users.id

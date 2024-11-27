@@ -55,6 +55,10 @@ if ($action == 'user' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $user = getObjectOr404('user', $id);
 
+    if ($user->isGhost) {
+        return404();
+    }
+
     $mode = FILTER_INPUT(INPUT_GET, 'mode');
     if ($mode !== 'posts' && $mode !== 'comments') {
         $mode = 'posts';

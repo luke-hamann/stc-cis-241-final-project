@@ -34,7 +34,7 @@
                             echo htmlspecialchars($model->currentUser->name); ?></a>
                     </li>
                     <li>
-                        <a href="?action=password">Change password</a>
+                        <a href="?action=changePassword">Change password</a>
                     </li>
                     <li>
                         <form action="?action=logout" method="post">

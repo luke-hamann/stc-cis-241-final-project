@@ -5,6 +5,7 @@
 
 require_once('./models/viewModels/editForumViewModel.php');
 require_once('./models/viewModels/deletionViewModel.php');
+require_once('./models/viewModels/resetPasswordResultViewModel.php');
 
 /**
  * Display a form for creating a forum
@@ -132,4 +133,65 @@ if ($action == 'deleteThread' && $isPostRequest) {
     $post = getObjectOr404('post', $id);
     PostDB::deletePost($post, true);
     header('Location: ?action=forum&id=' . $post->forumId);
+}
+
+/**
+ * Display a form to confirm the deletion of a user
+ */
+if ($action == 'deleteUser' && $isGetRequest) {
+    checkAdmin($currentUser);
+    $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $user = getObjectOr404('user', $id);
+    if ($user->isAdmin || $user->isGhost) {
+        return404();
+    }
+
+    $model = new DeletionViewModel(
+        $id,
+        $user->name,
+        '?action=deleteUser&id=',
+        '?action=users',
+        $currentUser
+    );
+
+    include('./views/shared/deleteObject.php');
+    exit();
+}
+
+/**
+ * Accept form data to confirm the deletion of a user
+ */
+if ($action == 'deleteUser' && $isPostRequest) {
+    checkAdmin($currentUser);
+    $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $user = getObjectOr404('user', $id);
+    if ($user->isAdmin || $user->isGhost) {
+        return404();
+    }
+
+    UserDB::markUserAsGhost($user);
+    header('Location: ?action=users');
+}
+
+/**
+ * Accept form data for resetting a user's password
+ */
+if ($action == 'resetPassword' && $isPostRequest) {
+    checkAdmin($currentUser);
+    $confirm = FILTER_INPUT(INPUT_POST, 'confirm');
+    if ($confirm === null) {
+        header('Location: ?action=users');
+    }
+
+    $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $user = getObjectOr404('user', $id);
+    if ($user->name == 'ghost') {
+        return404();
+    }
+
+    $user = UserDB::resetUserPassword($user);
+
+    $model = new ResetPasswordResultViewModel($user, $currentUser);
+    include('./views/admin/resetPasswordResult.php');
+    exit();
 }

@@ -18,7 +18,9 @@ class UserDB {
 
         $users = [];
         foreach ($rows as $row) {
-            $users[] = new User($row['id'], $row['name'], '', $row['admin']);
+            if ($row['isGhost']) continue;
+            $users[] = new User(
+                $row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
         }
 
         return $users;
@@ -36,7 +38,7 @@ class UserDB {
         $row = $statement->fetch();
         $statement->closeCursor();
         if ($row === false) return null;
-        return new User($row['id'], $row['name'], '', $row['admin']);
+        return new User($row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
     }
 
     /**
@@ -51,7 +53,7 @@ class UserDB {
         $row = $statement->fetch();
         $statement->closeCursor();
         if ($row === false) return null;
-        return new User($row['id'], $row['name'], '', $row['admin']);
+        return new User($row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
     }
 
     /**
@@ -68,11 +70,13 @@ class UserDB {
         $statement->execute();
         $row = $statement->fetch();
         $statement->closeCursor();
-        if ($row === false || !password_verify($password, $row['password'])) {
+        if ($row === false ||
+            !password_verify($password, $row['password']) ||
+            $row['isGhost']) {
             return null;
         }
 
-        return new User($row['id'], $row['name'], '', $row['admin']);
+        return new User($row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
     }
 
     /**
@@ -82,8 +86,8 @@ class UserDB {
         $db = Database::getDB();
         $user->password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
-            INSERT INTO Users (name, password, admin)
-            VALUES (:name, :password, FALSE)
+            INSERT INTO Users (name, password, isAdmin, isGhost)
+            VALUES (:name, :password, FALSE, FALSE)
         ';
         $statement = $db->prepare($query);
         $statement->bindValue(':name', $user->name);
@@ -106,6 +110,31 @@ class UserDB {
         $statement = $db->prepare($query);
         $statement->bindValue(':password',
             password_hash($user->password, PASSWORD_DEFAULT));
+        $statement->bindValue(':id', $user->id);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    /**
+     * Reset a user's password
+     */
+    public static function resetUserPassword(User $user) {
+        $user->password = bin2hex(random_bytes(16));
+        self::updateUserPassword($user);
+        return $user;
+    }
+
+    /**
+     * Mark a user as a ghost
+     */
+    public static function markUserAsGhost(User $user) {
+        $db = Database::getDB();
+        $query = '
+            UPDATE Users
+            SET isGhost = TRUE
+            WHERE id = :id
+        ';
+        $statement = $db->prepare($query);
         $statement->bindValue(':id', $user->id);
         $statement->execute();
         $statement->closeCursor();

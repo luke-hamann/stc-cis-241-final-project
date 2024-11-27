@@ -2,7 +2,7 @@
 
 <h1>Forums</h1>
 
-<?php if (isset($model->currentUser) && $model->currentUser->admin) : ?>
+<?php if (isset($model->currentUser) && $model->currentUser->isAdmin) : ?>
     <a href="?action=addForum" class="btn btn-primary">Add Forum</a>
 <?php endif; ?>
 
@@ -20,12 +20,14 @@
                             <?php echo htmlspecialchars($forum->name); ?>
                         </a>
                     </td>
-                    <?php if (isset($model->currentUser) && $model->currentUser->admin) : ?>
+                    <?php if (isset($model->currentUser) && $model->currentUser->isAdmin) : ?>
                         <td>
-                            <a href="?action=editForum&id=<?php echo $forum->id; ?>">Edit</a>
+                            <a href="?action=editForum&id=<?php echo $forum->id; ?>"
+                                class="btn btn-warning">Edit</a>
                         </td>
                         <td>
-                            <a href="?action=deleteForum&id=<?php echo $forum->id; ?>">Delete</a>
+                            <a href="?action=deleteForum&id=<?php echo $forum->id; ?>"
+                                class="btn btn-danger">Delete</a>
                         </td>
                     <?php endif; ?>
                 </tr>

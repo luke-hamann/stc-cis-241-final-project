@@ -30,7 +30,7 @@ function checkLoggedIn($currentUser) {
  */
 function checkAdmin($currentUser) {
     checkLoggedIn($currentUser);
-    if (!$currentUser->admin) {
+    if (!$currentUser->isAdmin) {
         return404();
     }
 }
@@ -83,11 +83,14 @@ function getObjectOr404($type, $id) {
 function getOwnedObjectOr404($type, $id, $currentUser) {
     $object = getObjectOr404($type, $id);
 
-    if (!isset($currentUser) || $object->userId != $currentUser->id) {
+    $allowed = isset($currentUser) &&
+        ($currentUser->isAdmin || $object->userId != $currentUser->id);
+
+    if ($allowed) {
+        return $object;
+    } else {
         return404();
     }
-
-    return $object;
 }
 
 ?>

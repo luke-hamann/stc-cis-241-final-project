@@ -85,7 +85,7 @@ if ($action == 'logout' && $isPostRequest) {
 /**
  * Display the change password form
  */
-if ($action == 'password' && $isGetRequest) {
+if ($action == 'changePassword' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $model = new ChangePasswordViewModel('', '', '', $currentUser);
     include('./views/account/changePassword.php');
@@ -95,7 +95,7 @@ if ($action == 'password' && $isGetRequest) {
 /**
  * Accept form data to change passwords
  */
-if ($action == 'password' && $isPostRequest) {
+if ($action == 'changePassword' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $model = ChangePasswordViewModel::fromArray($_POST);
     $model->currentUser = $currentUser;
