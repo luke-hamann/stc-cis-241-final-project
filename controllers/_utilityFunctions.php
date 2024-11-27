@@ -84,7 +84,7 @@ function getOwnedObjectOr404($type, $id, $currentUser) {
     $object = getObjectOr404($type, $id);
 
     $allowed = isset($currentUser) &&
-        ($currentUser->isAdmin || $object->userId != $currentUser->id);
+        ($currentUser->isAdmin || $object->userId == $currentUser->id);
 
     if ($allowed) {
         return $object;

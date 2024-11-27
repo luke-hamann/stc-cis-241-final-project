@@ -48,7 +48,7 @@ class Comment {
             $postId,
             null,
             0,
-            new User(0, '', '', false)
+            new User(0, '', '', false, false)
         );
     }
 
