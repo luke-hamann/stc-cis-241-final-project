@@ -1,5 +1,5 @@
 <?php if (count($model->getErrors()) > 0) : ?>
-    <ul>
+    <ul class="text-danger">
         <?php foreach ($model->getErrors() as $error) : ?>
             <li>
                 <?php echo htmlspecialchars($error); ?>

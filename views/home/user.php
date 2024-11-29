@@ -1,34 +1,41 @@
 <?php include('./views/shared/header.php'); ?>
 
-<h1>
-    <?php echo htmlspecialchars($model->user->name); ?>
-</h1>
-
-<p>
-    <a href="?action=user&id=<?php echo $model->user->id; ?>&mode=posts">Posts</a>
-    <a href="?action=user&id=<?php echo $model->user->id; ?>&mode=comments">Comments</a>
-</p>
-
-<?php if ($model->mode == 'posts') : ?>
-    <h2>Posts</h2>
-    <p>
-        <?php echo count($model->posts) . ' post' .
-            (count($model->posts) == 1 ? '' : 's'); ?>
-    </p>
-    <?php foreach ($model->posts as $post) : ?>
-        <?php include('./views/shared/post.php'); ?>
-    <?php endforeach; ?>
-<?php else : ?>
-    <h2>Comments</h2>
-    <p>
-        <?php echo count($model->comments) . ' comment' .
-                (count($model->comments) == 1 ? '' : 's'); ?>
-    </p>
-    <?php foreach ($model->comments as $comment) : ?>
-        <div>
-            <?php include('./views/shared/comment.php'); ?>
-        </div>
-    <?php endforeach; ?>
-<?php endif; ?>
+<div class="container">
+    <div>
+        <h1 class="p-3 m-3">
+            <?php echo htmlspecialchars($model->user->name); ?>
+        </h1>
+        <?php if (isset($model->currentUser) && $model->user->id == $model->currentUser->id) : ?>
+            <div class="p-3 m-3">
+                <a href="?action=changePassword">Change Password</a>
+            </div>
+        <?php endif; ?>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="?action=user&id=<?php echo $model->user->id; ?>&mode=posts" class="nav-link <?php echo ($model->mode == 'posts' ? 'active' : ''); ?>">Posts</a>
+            </li>
+            <li class="nav-item">
+                <a href="?action=user&id=<?php echo $model->user->id; ?>&mode=comments" class="nav-link <?php echo ($model->mode == 'comments' ? 'active' : ''); ?>">Comments</a>
+            </li>
+        </ul>
+    </div>
+    <?php if ($model->mode == 'posts') : ?>
+        <p class="m-3">
+            <?php echo count($model->posts) . ' post' . (count($model->posts) == 1 ? '' : 's'); ?>
+        </p>
+        <?php foreach ($model->posts as $post) : ?>
+            <?php include('./views/shared/post.php'); ?>
+        <?php endforeach; ?>
+    <?php else : ?>
+        <p class="m-3">
+            <?php echo count($model->comments) . ' comment' . (count($model->comments) == 1 ? '' : 's'); ?>
+        </p>
+        <?php foreach ($model->comments as $comment) : ?>
+            <div>
+                <?php include('./views/shared/comment.php'); ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 
 <?php include('./views/shared/footer.php'); ?>

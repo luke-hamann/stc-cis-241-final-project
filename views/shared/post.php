@@ -1,56 +1,39 @@
-<div class="post-component p-2">
+<div class="p-3 m-3 border">
     <h2>
-        <a href="?action=post&id=<?php echo $post->id; ?>">
-            <?php if ($post->isDeleted) : ?>
-                [deleted]
-            <?php else : ?>
-                <?php echo htmlspecialchars($post->title); ?>
-            <?php endif; ?>
-        </a>
+        <a href="?action=post&id=<?php echo $post->id; ?>" class="text-decoration-none"><?php echo ($post->isDeleted ? '[deleted]' : htmlspecialchars($post->title)); ?></a>
     </h2>
-    <p>
-        Posted to
-        <a href="?action=forum&id=<?php echo $post->forumId; ?>"><?php
-            echo htmlspecialchars($post->forum->name); ?></a>
-        by
-        <?php if (!$post->user->isGhost) : ?>
-            <a href="?action=user&id=<?php echo $post->user->id; ?>"><?php
-                echo htmlspecialchars($post->user->name); ?></a>
-        <?php else : ?>
+    <div class="mb-3">
+        <a href="?action=forum&id=<?php echo $post->forumId; ?>" class="text-decoration-none"><?php echo htmlspecialchars($post->forum->name); ?></a>
+        &bullet;
+        <?php if ($post->user->isGhost) : ?>
             [deleted user]
+        <?php else : ?>
+            <a href="?action=user&id=<?php echo $post->user->id; ?>" class="text-decoration-none"><?php echo htmlspecialchars($post->user->name); ?></a>
         <?php endif; ?>
-        on
+        &bullet;
         <?php echo $post->creationDate->format(DATE_RFC7231); ?>
-    </p>
-    <?php if (isset($currentUser)) : ?>
-        <div>
-            <?php if ($post->userId == $currentUser->id) : ?>
-                <a href="?action=editPost&id=<?php echo $post->id; ?>"
-                    class="btn btn-warning">Edit</a>
-            <?php endif; ?>
+        <?php if (isset($currentUser)) : ?>
             <?php if ($post->userId == $currentUser->id || $currentUser->isAdmin) : ?>
-                <form action="?action=deletePost&id=<?php echo $post->id; ?>" method="post"
-                    class="d-inline">
-                    <?php if ($post->isDeleted) : ?>
-                        <input type="submit" value="Undelete Post"
-                            class="btn btn-primary" />
-                    <?php else : ?>
-                        <input type="submit" value="Delete Post"
-                            class="btn btn-danger" />
-                    <?php endif; ?>
+                &bullet;
+                <form action="?action=deletePost&id=<?php echo $post->id; ?>" method="post" class="d-inline">
+                    <input type="submit" value="<?php echo ($post->isDeleted ? 'show' : 'hide'); ?>" class="btn-link bg-transparent border-0 text-primary text-decoration-none" />
                 </form>
             <?php endif; ?>
-            <?php if ($currentUser->isAdmin) : ?>
-                <a href="?action=deleteThread&id=<?php echo $post->id; ?>"
-                    class="btn btn-danger">Delete Thread</a>
+            <?php if ($post->userId == $currentUser->id) : ?>
+                &bullet;
+                <a href="?action=editPost&id=<?php echo $post->id; ?>" class="text-decoration-none">edit</a>
             <?php endif; ?>
-        </div>
-    <?php endif; ?>
-    <p>
+            <?php if ($currentUser->isAdmin) : ?>
+                &bullet;
+                <a href="?action=deleteThread&id=<?php echo $post->id; ?>" class="text-decoration-none">delete</a>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <div>
         <?php if ($post->isDeleted) : ?>
             [deleted]
         <?php else : ?>
             <?php echo nl2br(htmlspecialchars($post->content)); ?>
         <?php endif; ?>
-    </p>
+    </div>
 </div>

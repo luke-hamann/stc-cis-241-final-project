@@ -6,21 +6,20 @@
 
 <?php include('./views/shared/header.php'); ?>
 
-<h1>
-    Confirm Deletion
-</h1>
-
-<form action="<?php echo $model->formActionStub . $model->id; ?>" method="post">
-    <input type="hidden" name="id" value="<?php echo $model->id; ?>" />
-    <div>
-        Are you sure you want to delete "<?php echo $model->summary; ?>"?
+<div class="row">
+    <div class="col-sm-4 offset-sm-4 mt-5">
+        <form action="<?php echo $model->formActionStub . $model->id; ?>" method="post">
+            <h1>Confirm Deletion</h1>
+            <input type="hidden" name="id" value="<?php echo $model->id; ?>" />
+            <div class="mb-3">
+                Are you sure you want to delete "<?php echo $model->summary; ?>"?
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Yes" class="btn btn-danger" />
+                <a href="<?php echo $model->cancelUrl; ?>" class="btn btn-secondary">No</a>
+            </div>
+        </form>
     </div>
-    <div>
-        <input type="submit" value="Yes" />
-        <a href="<?php echo $model->cancelUrl; ?>">
-            No
-        </a>
-    </div>
-</form>
+</div>
 
 <?php include('./views/shared/footer.php'); ?>
