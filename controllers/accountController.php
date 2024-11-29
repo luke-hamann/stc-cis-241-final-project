@@ -6,7 +6,7 @@
 
 require_once('./models/viewModels/loginViewModel.php');
 require_once('./models/viewModels/registerViewModel.php');
-require_once('./models/viewModels/changePasswordViewModel.php');
+require_once('./models/viewModels/passwordChangeViewModel.php');
 
 /**
  * Display the login form
@@ -87,7 +87,7 @@ if ($action == 'logout' && $isPostRequest) {
  */
 if ($action == 'changePassword' && $isGetRequest) {
     checkLoggedIn($currentUser);
-    $model = new ChangePasswordViewModel('', '', '', $currentUser);
+    $model = new PasswordChangeViewModel('', '', '', $currentUser);
     include('./views/account/changePassword.php');
     exit();
 }
@@ -97,7 +97,7 @@ if ($action == 'changePassword' && $isGetRequest) {
  */
 if ($action == 'changePassword' && $isPostRequest) {
     checkLoggedIn($currentUser);
-    $model = ChangePasswordViewModel::fromArray($_POST);
+    $model = PasswordChangeViewModel::fromArray($_POST);
     $model->currentUser = $currentUser;
     $model->validate();
     if (!$model->isValid()) {

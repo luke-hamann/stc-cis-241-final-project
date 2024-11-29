@@ -6,7 +6,7 @@
 
 require_once('./models/viewModels/_formViewModel.php');
 
-class ChangePasswordViewModel extends FormViewModel {
+class PasswordChangeViewModel extends FormViewModel {
     public $passwordOld;
     public $passwordNew;
     public $passwordNewConfirm;
@@ -42,7 +42,7 @@ class ChangePasswordViewModel extends FormViewModel {
             $passwordNewConfirm = $array['passwordNewConfirm'];
         }
 
-        return new ChangePasswordViewModel(
+        return new PasswordChangeViewModel(
             $passwordOld,
             $passwordNew,
             $passwordNewConfirm,

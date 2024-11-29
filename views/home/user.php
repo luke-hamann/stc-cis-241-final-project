@@ -7,7 +7,7 @@
         </h1>
         <?php if (isset($model->currentUser) && $model->user->id == $model->currentUser->id) : ?>
             <div class="p-3 m-3">
-                <a href="?action=changePassword">Change Password</a>
+                <a href="?action=changePassword" class="btn btn-warning">Change Password</a>
             </div>
         <?php endif; ?>
         <ul class="nav nav-tabs">

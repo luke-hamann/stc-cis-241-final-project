@@ -6,7 +6,7 @@
 
 require_once('./models/viewModels/_formViewModel.php');
 
-class EditCommentViewModel extends FormViewModel {
+class CommentEditViewModel extends FormViewModel {
     public $comment;
     public $currentUser;
 

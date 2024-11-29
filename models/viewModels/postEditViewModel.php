@@ -6,7 +6,7 @@
 
 require_once('./models/viewModels/_formViewModel.php');
 
-class EditPostViewModel extends FormViewModel {
+class PostEditViewModel extends FormViewModel {
     public $mode;
     public $post;
     public $forums;

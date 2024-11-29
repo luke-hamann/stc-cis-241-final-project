@@ -210,7 +210,7 @@ class PostDB {
     /**
      * Toggle whether a post is marked as deleted
      */
-    public static function toggleDeletedPost(Post $post) {
+    public static function togglePostVisibility(Post $post) {
         $db = Database::getDB();
         $query = '
             UPDATE Posts

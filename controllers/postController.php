@@ -5,35 +5,66 @@
  */
 
 require_once('./models/viewModels/postViewModel.php');
-require_once('./models/viewModels/editPostViewModel.php');
-require_once('./models/viewModels/editCommentViewModel.php');
+require_once('./models/viewModels/postEditViewModel.php');
+require_once('./models/viewModels/commentEditViewModel.php');
 require_once('./models/viewModels/deletionViewModel.php');
+
+/**
+ * Display a given post with its comments
+ */
+if ($action == 'post' && $isGetRequest) {
+    $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $post = getObjectOr404('post', $id);
+    $model = new PostViewModel($post, $currentUser, null);
+    include('./views/post/post.php');
+    exit();
+}
+
+/**
+ * Accept form data for publishing a new comment
+ */
+if ($action == 'post' && $isPostRequest) {
+    checkLoggedIn($currentUser);
+    $id = FILTER_INPUT(INPUT_POST, 'postId', FILTER_VALIDATE_INT);
+    $post = getObjectOr404('post', $id);
+    $comment = Comment::fromArray($_POST);
+    $comment->userId = $currentUser->id;
+
+    $model = new PostViewModel($post, $currentUser, $comment);
+    $model->validate();
+    if (!$model->isValid()) {
+        include('./views/post/post.php');
+        exit();
+    }
+
+    CommentDB::addComment($comment);
+    header('Location: ?action=post&id=' . $comment->postId);
+}
 
 /**
  * Display a form for creating a new post
  */
 if ($action == 'new' && $isGetRequest) {
     checkLoggedIn($currentUser);
-    $model = new EditPostViewModel('Add', null, ForumDB::getForums(), $currentUser);
-    include('./views/home/editPost.php');
+    $model = new PostEditViewModel('Add', null, ForumDB::getForums(), $currentUser);
+    include('./views/post/postEdit.php');
     exit();
 }
 
 /**
- * Accept form data for publishing a new post
+ * Accept form data for creating a new post
  */
 if ($action == 'new' && $isPostRequest) {
     checkLoggedIn($currentUser);
-    $model = new EditPostViewModel(
-        'Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
+    $model = new PostEditViewModel('Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
+    $model->post->userId = $currentUser->id;
 
+    $model->validate();
     if (!$model->isValid()) {
-        $errors = $model->getErrors();
-        include('./views/home/editPost.php');
+        include('./views/post/postEdit.php');
         exit();
     }
 
-    $model->post->userId = $currentUser->id;
     $id = PostDB::addPost($model->post);
     header('Location: ?action=post&id=' . $id);
 }
@@ -45,9 +76,9 @@ if ($action == 'editPost' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
-    $model = new EditPostViewModel(
+    $model = new PostEditViewModel(
         'Edit', $post, ForumDB::getForums(), $currentUser);
-    include('./views/home/editPost.php');
+    include('./views/post/postEdit.php');
     exit();
 }
 
@@ -59,51 +90,28 @@ if ($action == 'editPost' && $isPostRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     getOwnedObjectOr404('post', $id, $currentUser);
     $post = Post::fromArray($_POST);
-    $post->id = $id;
     $post->userId = $currentUser->id;
 
-    $model = new EditPostViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
+    $model = new PostEditViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
     $model->validate();
     if (!$model->isValid()) {
-        include('./views/home/editPost.php');
+        include('./views/post/postEdit.php');
         exit();
     }
+
     PostDB::updatePost($post);
     header('Location: ?action=post&id=' . $post->id);
 }
 
 /**
- * Accept form data for confirming the deletion of a post
+ * Accept form data for toggling the visibility of a post
  */
-if ($action == 'deletePost' && $isPostRequest) {
+if ($action == 'togglePostVisibility' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getOwnedObjectOr404('post', $id, $currentUser);
-    PostDB::toggleDeletedPost($post);
+    PostDB::togglePostVisibility($post);
     header('Location: ?action=post&id=' . $post->id);
-}
-
-/**
- * Accept form data for publishing a new comment
- */
-if ($action == 'post' && $isPostRequest) {
-    checkLoggedIn($currentUser);
-
-    $id = FILTER_INPUT(INPUT_POST, 'postId', FILTER_VALIDATE_INT);
-    $post = getObjectOr404('post', $id);
-
-    $comment = Comment::fromArray($_POST);
-    $comment->userId = $currentUser->id;
-
-    $model = new PostViewModel($post, $currentUser, $comment);
-    $model->validate();
-    if (!$model->isValid()) {
-        include('./views/home/post.php');
-        exit();
-    }
-
-    CommentDB::addComment($comment);
-    header('Location: ?action=post&id=' . $comment->postId);
 }
 
 /**
@@ -112,9 +120,9 @@ if ($action == 'post' && $isPostRequest) {
 if ($action == 'editComment' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $comment = getObjectOr404('comment', $id);
-    $model = new EditCommentViewModel($comment, $currentUser);
-    include('./views/home/editComment.php');
+    $comment = getOwnedObjectOr404('comment', $id, $currentUser);
+    $model = new CommentEditViewModel($comment, $currentUser);
+    include('./views/post/commentEdit.php');
     exit();
 }
 
@@ -127,11 +135,11 @@ if ($action == 'editComment' && $isPostRequest) {
     $comment = getOwnedObjectOr404('comment', $id, $currentUser);
     $content = FILTER_INPUT(INPUT_POST, 'content');
     $comment->content = $content;
-    $model = new EditCommentViewModel($comment, $currentUser);
+    $model = new CommentEditViewModel($comment, $currentUser);
 
     $model->validate();
     if (!$model->isValid()) {
-        include('./views/home/editComment.php');
+        include('./views/post/commentEdit.php');
         exit();
     }
 
@@ -158,7 +166,7 @@ if ($action == 'deleteComment' && $isGetRequest) {
 }
 
 /**
- * Accept form data to accept deletion of a comment
+ * Accept form data to confirm the deletion of a comment
  */
 if ($action == 'deleteComment' && $isPostRequest) {
     checkLoggedIn($currentUser);
@@ -167,4 +175,5 @@ if ($action == 'deleteComment' && $isPostRequest) {
     CommentDB::deleteComment($id);
     header('Location: ?action=post&id=' . $comment->postId);
 }
+
 ?>

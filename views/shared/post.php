@@ -15,7 +15,7 @@
         <?php if (isset($currentUser)) : ?>
             <?php if ($post->userId == $currentUser->id || $currentUser->isAdmin) : ?>
                 &bullet;
-                <form action="?action=deletePost&id=<?php echo $post->id; ?>" method="post" class="d-inline">
+                <form action="?action=togglePostVisibility&id=<?php echo $post->id; ?>" method="post" class="d-inline">
                     <input type="submit" value="<?php echo ($post->isDeleted ? 'show' : 'hide'); ?>" class="btn-link bg-transparent border-0 text-primary text-decoration-none" />
                 </form>
             <?php endif; ?>

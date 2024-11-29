@@ -1,18 +1,19 @@
 <?php
 /**
  * Title: Admin Controller
+ * Purpose: To provide administrative functionality for managing forums and users
  */
 
-require_once('./models/viewModels/editForumViewModel.php');
+require_once('./models/viewModels/forumEditViewModel.php');
 require_once('./models/viewModels/deletionViewModel.php');
-require_once('./models/viewModels/resetPasswordResultViewModel.php');
+require_once('./models/viewModels/passwordResetViewModel.php');
 
 /**
  * Display a form for creating a forum
  */
 if ($action == 'addForum' && $isGetRequest) {
     checkAdmin($currentUser);
-    $model = new EditForumViewModel(null, 'Add', $currentUser);
+    $model = new ForumEditViewModel(null, 'Add', $currentUser);
     include('./views/admin/editForum.php');
     exit();
 }
@@ -23,7 +24,7 @@ if ($action == 'addForum' && $isGetRequest) {
 if ($action == 'addForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $forum = Forum::fromArray($_POST);
-    $model = new EditForumViewModel($forum, 'Add', $currentUser);
+    $model = new ForumEditViewModel($forum, 'Add', $currentUser);
 
     if (!ForumDB::isForumValid($forum)) {
         $model->pushError('A forum with that name already exists.');
@@ -33,6 +34,7 @@ if ($action == 'addForum' && $isPostRequest) {
         include('./views/admin/editForum.php');
         exit();
     }
+
     ForumDB::addForum($forum);
     header('Location: ?action=forums');
 }
@@ -44,7 +46,7 @@ if ($action == 'editForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $forum = getObjectOr404('forum', $id);
-    $model = new EditForumViewModel($forum, 'Edit', $currentUser);
+    $model = new ForumEditViewModel($forum, 'Edit', $currentUser);
     include('./views/admin/editForum.php');
     exit();
 }
@@ -57,7 +59,7 @@ if ($action == 'editForum' && $isPostRequest) {
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     getObjectOr404('forum', $id);
     $forum = Forum::fromArray($_POST);
-    $model = new EditForumViewModel($forum, 'Edit', $currentUser);
+    $model = new ForumEditViewModel($forum, 'Edit', $currentUser);
 
     $model->validate();
     if (!ForumDB::isForumValid($forum)) {
@@ -84,7 +86,7 @@ if ($action == 'deleteForum' && $isGetRequest) {
     $model = new DeletionViewModel(
         $forum->id,
         $forum->name,
-        '?action=deleteForm&id=',
+        '?action=deleteForum&id=',
         '?action=forums',
         $currentUser
     );
@@ -185,13 +187,13 @@ if ($action == 'resetPassword' && $isPostRequest) {
 
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $user = getObjectOr404('user', $id);
-    if ($user->name == 'ghost') {
+    if ($user->isGhost) {
         return404();
     }
 
     $user = UserDB::resetUserPassword($user);
 
-    $model = new ResetPasswordResultViewModel($user, $currentUser);
+    $model = new PasswordResetViewModel($user, $currentUser);
     include('./views/admin/resetPasswordResult.php');
     exit();
 }

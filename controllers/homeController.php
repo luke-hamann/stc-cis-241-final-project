@@ -1,6 +1,7 @@
 <?php
 /**
  * Title: Home Controller
+ * Purpose: To display the home page, forums and forum pages, and users and user pages
  */
 
 require_once('./models/viewModels/homeViewModel.php');
@@ -49,7 +50,7 @@ if ($action == 'users' && $isGetRequest) {
 }
 
 /**
- * Display a single user
+ * Display a single user and all their posts or comments
  */
 if ($action == 'user' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -74,17 +75,6 @@ if ($action == 'user' && $isGetRequest) {
 
     $model = new UserViewModel($user, $mode, $posts, $comments, $currentUser);
     include('./views/home/user.php');
-    exit();
-}
-
-/**
- * Display a given post with its comments
- */
-if ($action == 'post' && $isGetRequest) {
-    $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $post = getObjectOr404('post', $id);
-    $model = new PostViewModel($post, $currentUser, null);
-    include('./views/home/post.php');
     exit();
 }
 

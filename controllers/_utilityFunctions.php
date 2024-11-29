@@ -77,8 +77,7 @@ function getObjectOr404($type, $id) {
 }
 
 /**
- * Attempt to get an object of a type and id owned by a specific user
- * and return a 404 if not found
+ * Attempt to get an object of a type and id that is owned by a specific user and return a 404 if not found
  */
 function getOwnedObjectOr404($type, $id, $currentUser) {
     $object = getObjectOr404($type, $id);
