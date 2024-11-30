@@ -34,7 +34,7 @@ CREATE TABLE Posts (
     creationDate datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     userId int NOT NULL,
     forumId int NOT NULL,
-    isDeleted boolean NOT NULL,
+    isHidden boolean NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE,
     FOREIGN KEY (forumId) REFERENCES Forums(id) ON DELETE CASCADE
@@ -78,7 +78,7 @@ VALUES
     ('programming'),
     ('technology');
 
-INSERT INTO Posts (title, content, creationDate, userId, forumId, isDeleted)
+INSERT INTO Posts (title, content, creationDate, userId, forumId, isHidden)
 VALUES
     ('dolor vel est donec odio justo sollicitudin ut suscipit', 'sapien dignissim vestibulum vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae nulla dapibus dolor', '2022-07-17 08:56:29', 2, 4, FALSE),
     ('neque libero convallis', 'ut at dolor quis odio consequat varius integer ac leo pellentesque ultrices mattis odio', '2022-02-26 05:28:42', 5, 3, FALSE),

@@ -13,13 +13,13 @@ class Post {
     public $forumId;
     public $forum;
     public $comments;
-    public $isDeleted;
+    public $isHidden;
 
     /**
      * Construct a post object
      */
     public function __construct($id, $title, $content, $creationDate,
-        $userId, $user, $forumId, $forum, $comments, $isDeleted) {
+        $userId, $user, $forumId, $forum, $comments, $isHidden) {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
@@ -29,7 +29,7 @@ class Post {
         $this->forumId = $forumId;
         $this->forum = $forum;
         $this->comments = $comments;
-        $this->isDeleted = $isDeleted;
+        $this->isHidden = $isHidden;
     }
 
     /**

@@ -1,6 +1,6 @@
 <div class="p-3 m-3 border">
     <h2>
-        <a href="?action=post&id=<?php echo $post->id; ?>" class="text-decoration-none"><?php echo ($post->isDeleted ? '[deleted]' : htmlspecialchars($post->title)); ?></a>
+        <a href="?action=post&id=<?php echo $post->id; ?>" class="text-decoration-none"><?php echo ($post->isHidden ? '[deleted]' : htmlspecialchars($post->title)); ?></a>
     </h2>
     <div class="mb-3">
         <a href="?action=forum&id=<?php echo $post->forumId; ?>" class="text-decoration-none"><?php echo htmlspecialchars($post->forum->name); ?></a>
@@ -16,7 +16,7 @@
             <?php if ($post->userId == $currentUser->id || $currentUser->isAdmin) : ?>
                 &bullet;
                 <form action="?action=togglePostVisibility&id=<?php echo $post->id; ?>" method="post" class="d-inline">
-                    <input type="submit" value="<?php echo ($post->isDeleted ? 'show' : 'hide'); ?>" class="btn-link bg-transparent border-0 text-primary text-decoration-none" />
+                    <input type="submit" value="<?php echo ($post->isHidden ? 'show' : 'hide'); ?>" class="btn-link bg-transparent border-0 text-primary text-decoration-none" />
                 </form>
             <?php endif; ?>
             <?php if ($post->userId == $currentUser->id) : ?>
@@ -30,7 +30,7 @@
         <?php endif; ?>
     </div>
     <div>
-        <?php if ($post->isDeleted) : ?>
+        <?php if ($post->isHidden) : ?>
             [deleted]
         <?php else : ?>
             <?php echo nl2br(htmlspecialchars($post->content)); ?>

@@ -10,7 +10,7 @@ class PostDB {
             Posts.title,
             Posts.content,
             Posts.creationDate,
-            Posts.isDeleted,
+            Posts.isHidden,
             Users.id userId,
             Users.name userName,
             Users.isAdmin userIsAdmin,
@@ -42,7 +42,7 @@ class PostDB {
             $row['forumId'],
             new Forum($row['forumId'], $row['forumName'], []),
             [],
-            $row['isDeleted']
+            $row['isHidden']
         );
     }
 
@@ -116,7 +116,7 @@ class PostDB {
      */
     public static function addPost(Post $post) {
         $query = '
-            INSERT INTO Posts (title, content, userId, forumId, isDeleted)
+            INSERT INTO Posts (title, content, userId, forumId, isHidden)
             VALUES (:title, :content, :userId, :forumId, FALSE)
         ';
         Database::execute($query, [
@@ -138,7 +138,7 @@ class PostDB {
                 content = :content,
                 userId = :userId,
                 forumId = :forumId,
-                isDeleted = :isDeleted
+                isHidden = :isHidden
             WHERE id = :id
         ';
         Database::execute($query, [
@@ -146,18 +146,18 @@ class PostDB {
             ':content' => $post->content,
             ':userId' => $post->userId,
             ':forumId' => $post->forumId,
-            ':isDeleted' => $post->isDeleted,
+            ':isHidden' => $post->isHidden,
             ':id' => $post->id
         ]);
     }
 
     /**
-     * Toggle whether a post is marked as deleted
+     * Toggle whether a post is marked as hidden
      */
     public static function togglePostVisibility(Post $post) {
         $query = '
             UPDATE Posts
-            SET isDeleted = NOT isDeleted
+            SET isHidden = NOT isHidden
             WHERE id = :id
         ';
         Database::execute($query, [':id' => $post->id]);
