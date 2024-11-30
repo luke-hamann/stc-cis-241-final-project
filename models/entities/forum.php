@@ -9,7 +9,7 @@ class Forum {
     public $posts;
 
     /**
-     * Construct a comment object
+     * Construct a forum object
      */
     public function __construct($id, $name, $posts) {
         $this->id = $id;
@@ -18,22 +18,21 @@ class Forum {
     }
 
     /**
-     * Construct a comment object based on an associative array
+     * Construct a forum object based on an associative array
      */
     public static function fromArray(array $array) {
-        if (array_key_exists('id', $array)) {
-            $id = (int)$array['id'];
-        } else {
-            $id = 0;
+        $forum = new Forum(0, '', []);
+
+        if (array_key_exists('id', $array) &&
+            filter_var($array['id'], FILTER_VALIDATE_INT) !== false) {
+            $forum->id = (int)$array['id'];
         }
 
         if (array_key_exists('name', $array)) {
-            $name = $array['name'];
-        } else {
-            $name = '';
+            $forum->name = $array['name'];
         }
 
-        return new Forum($id, $name, []);
+        return $forum;
     }
 
     /**
@@ -43,7 +42,8 @@ class Forum {
         $errors = [];
 
         if (preg_match('/^[a-z\d_-]{1,32}$/', $this->name) !== 1) {
-            $errors[] = 'Forum name must be 1 to 32 characters and contain only lowercase letters, numbers, hyphens, and underscores.';
+            $errors[] = 'Forum name must be 1 to 32 characters long and ' .
+            'contain only lowercase letters, numbers, hyphens, and underscores.';
         }
 
         return $errors;

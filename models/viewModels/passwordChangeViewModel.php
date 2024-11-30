@@ -77,7 +77,7 @@ class PasswordChangeViewModel extends FormViewModel {
             if ($this->passwordNew != $this->passwordNewConfirm) {
                 $this->_errors[] = 'Passwords do not match.';
             } else {
-                $passwordError = User::isStrongPassword($this->passwordNew);
+                $passwordError = User::isValidPassword($this->passwordNew);
                 if ($passwordError != '') {
                     $this->_errors[] = $passwordError;
                 }

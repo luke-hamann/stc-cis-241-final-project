@@ -73,7 +73,7 @@ class RegisterViewModel extends FormViewModel {
             if ($this->password != $this->passwordConfirm) {
                 $this->_errors[] = 'Passwords do not match.';
             } else {
-                $passwordError = User::isStrongPassword($this->password);
+                $passwordError = User::isValidPassword($this->password);
                 if ($passwordError != '') {
                     $this->_errors[] = $passwordError;
                 }

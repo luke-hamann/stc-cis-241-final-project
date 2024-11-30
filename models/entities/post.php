@@ -15,13 +15,11 @@ class Post {
     public $comments;
     public $isDeleted;
 
-    private static $titlePattern = '/^[^\n]{1,128}$/';
-    private static $contentPattern = '/^.{1,1024}$/';
-
     /**
      * Construct a post object
      */
-    public function __construct($id, $title, $content, $creationDate, $userId, $user, $forumId, $forum, $comments, $isDeleted) {
+    public function __construct($id, $title, $content, $creationDate,
+        $userId, $user, $forumId, $forum, $comments, $isDeleted) {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
@@ -38,42 +36,27 @@ class Post {
      * Construct a post object based on an associative array
      */
     public static function fromArray(array $array) {
-        if (array_key_exists('id', $array)) {
-            $id = (int)$array['id'];
-        } else {
-            $id = 0;
+        $post = new Post(0, '', '', new DateTime(), 0, null, 0, null, [], false);
+
+        if (array_key_exists('id', $array) &&
+            filter_var($array['id'], FILTER_VALIDATE_INT) !== false) {
+            $post->id = (int)$array['id'];
         }
 
-        if (array_key_exists('title', $array) && gettype($array['title'] == 'string')) {
-            $title = $array['title'];
-        } else {
-            $title = '';
+        if (array_key_exists('title', $array)) {
+            $post->title = $array['title'];
         }
 
-        if (array_key_exists('content', $array) && gettype($array['content'] == 'string')) {
-            $content = $array['content'];
-        } else {
-            $content = '';
+        if (array_key_exists('content', $array)) {
+            $post->content = $array['content'];
         }
 
-        if (array_key_exists('forumId', $array)) {
-            $forumId = (int)$array['forumId'];
-        } else {
-            $forumId = 0;
+        if (array_key_exists('forumId', $array) &&
+            filter_var($array['forumId'], FILTER_VALIDATE_INT) !== false) {
+            $post->forumId = (int)$array['forumId'];
         }
 
-        return new Post(
-            $id,
-            $title,
-            $content,
-            new DateTime(),
-            0,
-            null,
-            $forumId,
-            null,
-            [],
-            false
-        );
+        return $post;
     }
 
     /**
@@ -86,11 +69,11 @@ class Post {
             $errors[] = 'Please select a forum.';
         }
 
-        if (preg_match(self::$titlePattern, $this->title) !== 1) {
+        if (preg_match('/^[^\n]{1,128}$/', $this->title) !== 1) {
             $errors[] = 'Please enter a title of 1 to 128 characters.';
         }
 
-        if (preg_match(self::$contentPattern, $this->content) !== 1) {
+        if (preg_match('/^.{1,1024}$/', $this->content) !== 1) {
             $errors[] = 'Please enter content of 1 to 1024 characters.';
         }
 

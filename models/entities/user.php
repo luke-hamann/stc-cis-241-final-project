@@ -21,21 +21,27 @@ class User {
         $this->isGhost = $isGhost;
     }
 
+    /**
+     * Validate a potential username
+     */
     public static function isValidName(string $name) {
-        $namePattern = '/^[\d[:lower:]\-_]+$/';
+        $namePattern = '/^[a-z\d_-]+$/';
         $error = '';
         if (preg_match($namePattern, $name) !== 1) {
-            $error = 'Names must contain only numbers,' .
-            'lowercase letters, hyphens, and underscores.';
+            $error = 'Names must contain only lowercase letters, ' .
+            'numbers, hyphens, and underscores.';
         }
         return $error;
     }
 
-    public static function isStrongPassword(string $password) {
-        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)()[^\n]{8,}$/';
+    /**
+     * Validate a potential password
+     */
+    public static function isValidPassword(string $password) {
+        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[^\n]{8,}$/';
         $error = '';
         if (preg_match($passwordPattern, $password) !== 1) {
-            $error = 'Password be at least 8 character long and ' .
+            $error = 'Password must be at least 8 characters long and ' .
                 'contain at least one number, one lowercase letter, ' .
                 'one uppercase letter, and one special character.';
         }
