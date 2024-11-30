@@ -35,7 +35,7 @@ class ForumDB {
     public static function getForum(int $id) {
         $query = self::BASE_QUERY . 'WHERE id = :id';
         $rows = Database::execute($query, [':id' => $id]);
-        if (count($rows) == 0) return false;
+        if (count($rows) == 0) return null;
         $forum = self::convertRowToForum($rows[0]);
         $forum->posts = PostDB::getForumPosts($id);
         return $forum;
@@ -47,7 +47,7 @@ class ForumDB {
     public static function getForumByName(string $name) {
         $query = self::BASE_QUERY . 'WHERE name = :name';
         $rows = Database::execute($query, [':name' => $name]);
-        if (count($rows) == 0) return false;
+        if (count($rows) == 0) return null;
         return self::convertRowToForum($rows[0]);
     }
 

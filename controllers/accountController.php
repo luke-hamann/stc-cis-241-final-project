@@ -13,7 +13,7 @@ require_once('./models/viewModels/passwordChangeViewModel.php');
  */
 if ($action == 'login' && $isGetRequest) {
     sendHomeIfLoggedIn($currentUser);
-    $model = new LoginViewModel('', '', $currentUser);
+    $model = new LoginViewModel('', '');
     include('./views/account/login.php');
     exit();
 }

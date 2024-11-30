@@ -51,7 +51,7 @@ class UserDB {
     public static function getUser(int $id) {
         $query = self::BASE_QUERY . 'WHERE id = :id';
         $rows = Database::execute($query, [':id' => $id]);
-        if (count($rows) == 0) return false;
+        if (count($rows) == 0) return null;
         return self::convertRowToUser($rows[0]);
     }
 
@@ -61,7 +61,7 @@ class UserDB {
     public static function getUserByName(string $name) {
         $query = self::BASE_QUERY . 'WHERE name = :name';
         $rows = Database::execute($query, [':name' => $name]);
-        if (count($rows) == 0) return false;
+        if (count($rows) == 0) return null;
         return self::convertRowToUser($rows[0]);
     }
 

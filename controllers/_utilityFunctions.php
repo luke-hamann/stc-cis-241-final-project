@@ -69,7 +69,7 @@ function getObjectOr404($type, $id) {
             return404();
     }
 
-    if ($object === false) {
+    if (!isset($object)) {
         return404();
     }
 

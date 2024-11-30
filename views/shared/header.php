@@ -32,7 +32,7 @@
                         </li>
                         <?php if (isset($model->currentUser)) : ?>
                             <li class="nav-item">
-                                <a href="?action=user&id=<?php echo $model->currentUser->id; ?>" class="nav-link">Profile</a>
+                                <a href="?action=user&id=<?php echo $model->currentUser->id; ?>" class="nav-link">Logged in as <?php echo htmlspecialchars($model->currentUser->name); ?></a>
                             </li>
                             <li class="nav-item">
                                 <form action="?action=logout" method="post">

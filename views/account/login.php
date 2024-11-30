@@ -1,9 +1,3 @@
-<?php
-/**
- * Model: LoginViewModel
- */
-?>
-
 <?php include('./views/shared/header.php'); ?>
 
 <div class="row">

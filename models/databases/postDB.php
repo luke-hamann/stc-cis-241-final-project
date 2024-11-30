@@ -105,7 +105,7 @@ class PostDB {
     public static function getPost(int $id) {
         $query = self::BASE_QUERY . 'WHERE Posts.id = :id';
         $rows = Database::execute($query, [':id' => $id]);
-        if (count($rows) == 0) return false;
+        if (count($rows) == 0) return null;
         $post = self::convertRowToPost($rows[0]);
         $post->comments = CommentDB::getPostComments($id);
         return $post;
