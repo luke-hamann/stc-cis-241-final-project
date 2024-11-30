@@ -4,33 +4,56 @@
  * Purpose: To view, add, update, and delete posts
  */
 class PostDB {
+    private const BASE_QUERY = '
+        SELECT
+            Posts.id,
+            Posts.title,
+            Posts.content,
+            Posts.creationDate,
+            Posts.isDeleted,
+            Users.id userId,
+            Users.name userName,
+            Users.isAdmin userIsAdmin,
+            Users.isGhost userIsGhost,
+            Forums.id forumId,
+            Forums.name forumName
+        FROM Posts
+            JOIN Users ON Posts.userId = Users.id
+            JOIN Forums ON Posts.forumId = Forums.id
+    ';    
 
-    private static function convertRowsToPosts($rows) {
-        $posts = array();
-        foreach ($rows as $row) {
-            $user = new User(
+    /**
+     * Convert a SQL row to a post object
+     */
+    private static function convertRowToPost($row) {
+        return new Post(
+            $row['id'],
+            $row['title'],
+            $row['content'],
+            new DateTime($row['creationDate']),
+            $row['userId'],
+            new User(
                 $row['userId'],
                 $row['userName'],
                 '',
                 $row['userIsAdmin'],
                 $row['userIsGhost']
-            );
-            $forum = new Forum($row['forumId'], $row['forumName'], []);
-            $post = new Post(
-                $row['id'],
-                $row['title'],
-                $row['content'],
-                new DateTime($row['creationDate']),
-                $row['userId'],
-                $user,
-                $row['forumId'],
-                $forum,
-                [],
-                $row['isDeleted']
-            );
-            $posts[] = $post;
-        }
+            ),
+            $row['forumId'],
+            new Forum($row['forumId'], $row['forumName'], []),
+            [],
+            $row['isDeleted']
+        );
+    }
 
+    /**
+     * Convert SQL rows to a list of post objects
+     */
+    private static function convertRowsToPosts($rows) {
+        $posts = [];
+        foreach ($rows as $row) {
+            $posts[] = self::convertRowToPost($row);
+        }
         return $posts;
     }
 
@@ -39,31 +62,16 @@ class PostDB {
      */
     public static function getRecentPosts(int $maxCount = 20) {
         $db = Database::getDB();
-        $query = '
-            SELECT
-                Posts.id,
-                Posts.title,
-                Posts.content,
-                Posts.creationDate,
-                Posts.isDeleted,
-                Users.id userId,
-                Users.name userName,
-                Users.isAdmin userIsAdmin,
-                Users.isGhost userIsGhost,
-                Forums.id forumId,
-                Forums.name forumName
-            FROM Posts
-                JOIN Users ON Posts.userId = Users.id
-                JOIN Forums ON Posts.forumId = Forums.id
+        $query = self::BASE_QUERY . '
             ORDER BY Posts.creationDate DESC
             LIMIT :maxCount
         ';
         $statement = $db->prepare($query);
-        $statement->bindValue(':maxCount', $maxCount, PDO::PARAM_INT); /* [1] */
+        // https://stackoverflow.com/questions/49770606/mysql-limit-clause-not-working-alongside-php-bindvalue
+        $statement->bindValue(':maxCount', $maxCount, PDO::PARAM_INT);
         $statement->execute();
         $rows = $statement->fetchAll();
         $statement->closeCursor();
-
         return self::convertRowsToPosts($rows);
     }
 
@@ -71,122 +79,59 @@ class PostDB {
      * Get all posts within a given forum
      */
     public static function getForumPosts(int $forumId) {
-        $db = Database::getDB();
-        $query = '
-            SELECT
-                Posts.id,
-                Posts.title,
-                Posts.content,
-                Posts.creationDate,
-                Posts.isDeleted,
-                Users.id userId,
-                Users.name userName,
-                Users.isAdmin userIsAdmin,
-                Users.isGhost userIsGhost,
-                Forums.id forumId,
-                Forums.name forumName
-            FROM Posts
-                JOIN Users ON Posts.userId = Users.id
-                JOIN Forums ON Posts.forumId = Forums.id
+        $query = self::BASE_QUERY . '
             WHERE Posts.forumId = :forumId
             ORDER BY Posts.creationDate DESC
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':forumId', $forumId);
-        $statement->execute();
-        $rows = $statement->fetchAll();
-        $statement->closeCursor();
-        
-        return self::convertRowsToPosts($rows);
-    }
-
-    public static function getUserPosts(int $userId) {
-        $db = Database::getDB();
-        $query = '
-            SELECT
-                Posts.id,
-                Posts.title,
-                Posts.content,
-                Posts.creationDate,
-                Posts.isDeleted,
-                Users.id userId,
-                Users.name userName,
-                Users.isAdmin userIsAdmin,
-                Users.isGhost userIsGhost,
-                Forums.id forumId,
-                Forums.name forumName
-            FROM Posts
-                JOIN Users ON Posts.userId = Users.id
-                JOIN Forums ON Posts.forumId = Forums.id
-            WHERE Posts.userId = :userId
-            ORDER BY Posts.creationDate DESC
-        ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':userId', $userId);
-        $statement->execute();
-        $rows = $statement->fetchAll();
-        $statement->closeCursor();
-
+        $rows = Database::execute($query, [':forumId' => $forumId]);
         return self::convertRowsToPosts($rows);
     }
 
     /**
-     * Get a single post
+     * Get all posts by a given user
+     */
+    public static function getUserPosts(int $userId) {
+        $query = self::BASE_QUERY . '
+            WHERE Posts.userId = :userId
+            ORDER BY Posts.creationDate DESC
+        ';
+        $rows = Database::execute($query, [':userId' => $userId]);
+        return self::convertRowsToPosts($rows);
+    }
+
+    /**
+     * Get a single post with its comments
      */
     public static function getPost(int $id) {
-        $db = Database::getDB();
-        $query = '
-            SELECT id, title, content, creationDate, userId, forumId, isDeleted
-            FROM Posts
-            WHERE id = :id
-        ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-
-        if ($row === false) return null;
-
-        $comments = CommentDB::getPostComments($id);
-        return new Post(
-            $id,
-            $row['title'],
-            $row['content'],
-            new DateTime($row['creationDate']),
-            $row['userId'],
-            UserDB::getUser($row['userId']),
-            $row['forumId'],
-            ForumDB::getForum($row['forumId']),
-            CommentDB::getPostComments($id),
-            $row['isDeleted']
-        );
+        $query = self::BASE_QUERY . 'WHERE Posts.id = :id';
+        $rows = Database::execute($query, [':id' => $id]);
+        if (count($rows) == 0) return false;
+        $post = self::convertRowToPost($rows[0]);
+        $post->comments = CommentDB::getPostComments($id);
+        return $post;
     }
 
     /**
      * Add a post
      */
     public static function addPost(Post $post) {
-        $db = Database::getDB();
         $query = '
             INSERT INTO Posts (title, content, userId, forumId, isDeleted)
             VALUES (:title, :content, :userId, :forumId, FALSE)
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':title', $post->title);
-        $statement->bindValue(':content', $post->content);
-        $statement->bindValue(':userId', $post->userId);
-        $statement->bindValue(':forumId', $post->forumId);
-        $statement->execute();
-        $statement->closeCursor();
-        return $db->lastInsertId();
+        Database::execute($query, [
+            ':title' => $post->title,
+            ':content' => $post->content,
+            ':userId' => $post->userId,
+            ':forumId' => $post->forumId
+        ]);
+        return Database::getDB()->lastInsertId();
     }
 
     /**
      * Update a post
      */
     public static function updatePost(Post $post) {
-        $db = Database::getDB();
         $query = '
             UPDATE Posts
             SET title = :title,
@@ -196,51 +141,37 @@ class PostDB {
                 isDeleted = :isDeleted
             WHERE id = :id
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':title', $post->title);
-        $statement->bindValue(':content', $post->content);
-        $statement->bindValue(':userId', $post->userId);
-        $statement->bindValue(':forumId', $post->forumId);
-        $statement->bindValue(':isDeleted', $post->isDeleted);
-        $statement->bindValue(':id', $post->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [
+            ':title' => $post->title,
+            ':content' => $post->content,
+            ':userId' => $post->userId,
+            ':forumId' => $post->forumId,
+            ':isDeleted' => $post->isDeleted,
+            ':id' => $post->id
+        ]);
     }
 
     /**
      * Toggle whether a post is marked as deleted
      */
     public static function togglePostVisibility(Post $post) {
-        $db = Database::getDB();
         $query = '
             UPDATE Posts
             SET isDeleted = NOT isDeleted
             WHERE id = :id
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $post->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [':id' => $post->id]);
     }
 
     /**
      * Delete a post
      */
     public static function deletePost(Post $post) {
-        $db = Database::getDB();
         $query = '
             DELETE FROM Posts
             WHERE id = :id
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $post->id);
-        $statement->execute();
+        Database::execute($query, [':id' => $post->id]);
     }
 }
-
-/**
- * Footnotes
- * 
- * [1]: https://stackoverflow.com/questions/49770606/mysql-limit-clause-not-working-alongside-php-bindvalue
- */
 ?>

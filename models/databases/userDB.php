@@ -1,118 +1,118 @@
 <?php
 /**
  * Title: User Database
- * Purpose: To list, add, update, and delete users
+ * Purpose: To view, add, update, and delete users
  */
 class UserDB {
+    private const BASE_QUERY = '
+        SELECT id, name, password, isAdmin, isGhost
+        FROM Users
+    ';
 
     /**
-     * Get a list of all users
+     * Convert a SQL row to a user object
      */
-    public static function getUsers() {
-        $db = Database::getDB();
-        $query = 'SELECT * FROM Users ORDER BY name';
-        $statement = $db->prepare($query);
-        $statement->execute();
-        $rows = $statement->fetchAll();
-        $statement->closeCursor();
+    private static function convertRowToUser($row) {
+        return new User(
+            $row['id'],
+            $row['name'],
+            $row['password'],
+            $row['isAdmin'],
+            $row['isGhost']
+        );
+    }
 
+    /**
+     * Convert SQL rows to a list of user objects
+     */
+    private static function convertRowsToUsers($rows) {
         $users = [];
         foreach ($rows as $row) {
-            if ($row['isGhost']) continue;
-            $users[] = new User(
-                $row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
+            $users[] = self::convertRowToUser($row);
         }
-
         return $users;
+    }
+
+    /**
+     * Get a list of all users, excluding ghosts
+     */
+    public static function getUsers() {
+        $query = self::BASE_QUERY . '
+            WHERE isGhost = FALSE
+            ORDER BY name
+        ';
+        $rows = Database::execute($query);
+        return self::convertRowsToUsers($rows);
     }
 
     /**
      * Get a user based on their id
      */
     public static function getUser(int $id) {
-        $db = Database::getDB();
-        $query = 'SELECT * FROM Users WHERE id = :id';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-        if ($row === false) return null;
-        return new User($row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
+        $query = self::BASE_QUERY . 'WHERE id = :id';
+        $rows = Database::execute($query, [':id' => $id]);
+        if (count($rows) == 0) return false;
+        return self::convertRowToUser($rows[0]);
     }
 
     /**
      * Get a user based on their name
      */
     public static function getUserByName(string $name) {
-        $db = Database::getDB();
-        $query = 'SELECT * FROM Users WHERE name = :name';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-        if ($row === false) return null;
-        return new User($row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
+        $query = self::BASE_QUERY . 'WHERE name = :name';
+        $rows = Database::execute($query, [':name' => $name]);
+        if (count($rows) == 0) return false;
+        return self::convertRowToUser($rows[0]);
     }
 
     /**
      * Attempt to authenticate given credentials
      */
     public static function loginUser(string $name, string $password) {
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $db = Database::getDB();
-        $query = 'SELECT *
-                  FROM Users
-                  WHERE name = :name';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-        if ($row === false ||
-            !password_verify($password, $row['password']) ||
-            $row['isGhost']) {
+        $query = self::BASE_QUERY . 'WHERE name = :name';
+        $rows = Database::execute($query, [':name' => $name]);
+        if (count($rows) == 0) return null;
+
+        $user = self::convertRowToUser($rows[0]);
+        if (!password_verify($password, $user->password) || $user->isGhost) {
             return null;
         }
 
-        return new User($row['id'], $row['name'], '', $row['isAdmin'], $row['isGhost']);
+        return $user;
     }
 
     /**
      * Add a user
      */
     public static function addUser(User $user) {
-        $db = Database::getDB();
         $user->password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
             INSERT INTO Users (name, password, isAdmin, isGhost)
-            VALUES (:name, :password, FALSE, FALSE)
+            VALUES (:name, :password, :isAdmin, :isGhost)
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $user->name);
-        $statement->bindValue(':password', $user->password);
-        $statement->execute();
-        $statement->closeCursor();
-        return $db->lastInsertId();
+        Database::execute($query, [
+            ':name' => $user->name,
+            ':password' => $user->password,
+            ':isAdmin' => $user->isAdmin,
+            ':isGhost' => $user->isGhost
+        ]);
+        return Database::getDB()->lastInsertId();
     }
 
     /**
      * Update a user's password
      */
     public static function updateUserPassword(User $user) {
-        $db = Database::getDB();
+        $user->password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
             UPDATE Users
             SET password = :password
             WHERE id = :id
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':password',
-            password_hash($user->password, PASSWORD_DEFAULT));
-        $statement->bindValue(':id', $user->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [
+            ':password' => $user->password,
+            ':id' => $user->id
+        ]);
     }
 
     /**
@@ -128,28 +128,20 @@ class UserDB {
      * Mark a user as a ghost
      */
     public static function markUserAsGhost(User $user) {
-        $db = Database::getDB();
         $query = '
             UPDATE Users
             SET isGhost = TRUE
             WHERE id = :id
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $user->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [':id' => $user->id]);
     }
 
     /**
      * Delete a user
      */
     public static function deleteUser(User $user) {
-        $db = Database::getDB();
         $query = 'DELETE FROM Users WHERE id = :id';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $user->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [':id' => $user->id]);
     }
 }
 ?>

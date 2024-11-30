@@ -4,25 +4,28 @@
  * Purpose: To view, add, update, and delete forums
  */
 class ForumDB {
-    private function __construct() {}
+    private const BASE_QUERY = '
+        SELECT id, name
+        FROM Forums
+    ';
+
+    /**
+     * Convert a SQL row to a forum object
+     */
+    private static function convertRowToForum($row) {
+        return new Forum($row['id'], $row['name'], []);
+    }
 
     /**
      * Get a list of all forums
      */
     public static function getForums() {
-        $db = Database::getDB();
-        $query = 'SELECT id, name FROM Forums ORDER BY name';
-        $statement = $db->prepare($query);
-        $statement->execute();
-        $rows = $statement->fetchAll();
-        $statement->closeCursor();
-
-        $forums = array();
+        $query = self::BASE_QUERY . 'ORDER BY name';
+        $rows = Database::execute($query);
+        $forums = [];
         foreach ($rows as $row) {
-            $forum = new Forum($row['id'], $row['name'], []);
-            $forums[] = $forum;
+            $forums[] = self::convertRowToForum($row);
         }
-
         return $forums;
     }
 
@@ -30,102 +33,69 @@ class ForumDB {
      * Get a forum with all its posts
      */
     public static function getForum(int $id) {
-        $db = Database::getDB();
-        $query = 'SELECT id, name FROM Forums WHERE id = :id';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-
-        if ($row === false) return null;
-
-        $posts = PostDB::getForumPosts($id);
-
-        return new Forum($row['id'], $row['name'], $posts);
+        $query = self::BASE_QUERY . 'WHERE id = :id';
+        $rows = Database::execute($query, [':id' => $id]);
+        if (count($rows) == 0) return false;
+        $forum = self::convertRowToForum($rows[0]);
+        $forum->posts = PostDB::getForumPosts($id);
+        return $forum;
     }
 
     /**
      * Get a forum by its name
      */
     public static function getForumByName(string $name) {
-        $db = Database::getDB();
-        $query = 'SELECT id, name FROM Forums WHERE name = :name';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $name);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-
-        if ($row === false) return null;
-
-        return new Forum($row['id'], $row['name'], null);
+        $query = self::BASE_QUERY . 'WHERE name = :name';
+        $rows = Database::execute($query, [':name' => $name]);
+        if (count($rows) == 0) return false;
+        return self::convertRowToForum($rows[0]);
     }
 
     /**
      * Validate a forum
      */
     public static function isForumValid(Forum $forum) {
-        $db = Database::getDB();
-        $query = '
-            SELECT id, name
-            FROM Forums
-            WHERE name = :name AND
-                id != :id
-        ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $forum->name);
-        $statement->bindValue(':id', $forum->id);
-        $statement->execute();
-        $row = $statement->fetch();
-        $statement->closeCursor();
-
-        return ($row === false);
+        $query = self::BASE_QUERY . 'WHERE name = :name AND id != :id';
+        $rows = Database::execute($query, [
+            ':name' => $forum->name,
+            ':id' => $forum->id
+        ]);
+        return (count($rows) == 0);
     }
 
     /**
      * Add a forum
      */
     public static function addForum(Forum $forum) {
-        $db = Database::getDB();
         $query = '
             INSERT INTO Forums (name)
             VALUES (:name)
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $forum->name);
-        $statement->execute();
-        $statement->closeCursor();
-        return $db->lastInsertId();
+        Database::execute($query, [':name' => $forum->name]);
+        return Database::getDB()->lastInsertId();
     }
 
     /**
      * Update a forum
      */
     public static function updateForum(Forum $forum) {
-        $db = Database::getDB();
         $query = '
             UPDATE Forums
             SET name = :name
             WHERE id = :id
         ';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':name', $forum->name);
-        $statement->bindValue(':id', $forum->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [
+            ':name' => $forum->name,
+            ':id' => $forum->id
+        ]);
     }
 
     /**
      * Delete a forum
      */
     public static function deleteForum(Forum $forum) {
-        $db = Database::getDB();
         $query = 'DELETE FROM Forums WHERE id = :id';
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $forum->id);
-        $statement->execute();
-        $statement->closeCursor();
+        Database::execute($query, [':id' => $forum->id]);
     }
 }
 ?>
