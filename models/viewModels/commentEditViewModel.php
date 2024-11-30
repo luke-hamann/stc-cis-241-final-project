@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: Edit Comment View Model
- * Purpose: To provide a model for editing comments
+ * Title: Comment Edit View Model
+ * Purpose: To provide a model for the comment edit form
  */
 
 require_once('./models/viewModels/_formViewModel.php');

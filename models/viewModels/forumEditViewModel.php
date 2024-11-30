@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: Edit Forum View Model
- * Purpose: To provide a model for editing forms 
+ * Title: Forum Edit View Model
+ * Purpose: To provide a model for adding and editing forums
  */
 
 require_once('./models/viewModels/_formViewModel.php');

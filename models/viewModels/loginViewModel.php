@@ -9,15 +9,13 @@ require_once('./models/viewModels/_formViewModel.php');
 class LoginViewModel extends FormViewModel {
     public $name;
     public $password;
-    public $currentUser;
 
     /**
      * Construct the view model
      */
-    public function __construct(string $name, string $password, $currentUser) {
+    public function __construct(string $name, string $password) {
         $this->name = $name;
         $this->password = $password;
-        $this->currentUser = $currentUser;
     }
 
     /**
@@ -35,7 +33,7 @@ class LoginViewModel extends FormViewModel {
             $password = $array['password'];
         }
 
-        return new LoginViewModel($name, $password, null);
+        return new LoginViewModel($name, $password);
     }
 
     /**

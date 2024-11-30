@@ -7,6 +7,11 @@ abstract class FormViewModel {
     protected $_errors = [];
 
     /**
+     * Validate the model by adding applicable error messages to the error list
+     */
+    abstract public function validate();
+
+    /**
      * Get the errors
      */
     public function getErrors() {

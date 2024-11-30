@@ -8,7 +8,7 @@ class HomeViewModel {
     public $currentUser;
 
     /**
-     * Construct the model
+     * Construct the view model
      */
     function __construct($posts, $currentUser) {
         $this->posts = $posts;

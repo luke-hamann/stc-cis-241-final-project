@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Deletion View Model
- * Purpose: To provide a view model for arbitary deletion forms
+ * Purpose: To provide a view model for arbitrary deletion confirmation forms
  */
 class DeletionViewModel {
     public $id;
