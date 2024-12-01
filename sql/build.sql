@@ -9,22 +9,23 @@ USE forumSite;
 
 /* Create tables */
 
-SET default_storage_engine = InnoDB;
+SET default_storage_engine = InnoDB; -- Enforce foreign keys
 
 CREATE TABLE Forums (
     id int NOT NULL AUTO_INCREMENT,
-    name varchar(64) NOT NULL,
+    name varchar(32) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE (name)
 );
 
 CREATE TABLE Users (
     id int NOT NULL AUTO_INCREMENT,
-    name varchar(64) NOT NULL,
+    name varchar(32) NOT NULL,
     password varchar(255) NOT NULL,
     isAdmin boolean NOT NULL,
     isGhost boolean NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (name)
 );
 
 CREATE TABLE Posts (

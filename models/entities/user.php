@@ -25,7 +25,7 @@ class User {
      * Validate a potential username
      */
     public static function isValidName(string $name) {
-        $namePattern = '/^[a-z\d_-]+$/';
+        $namePattern = '/^[a-z\d_-]{1,32}$/';
         $error = '';
         if (preg_match($namePattern, $name) !== 1) {
             $error = 'Names must contain only lowercase letters, ' .
@@ -38,7 +38,7 @@ class User {
      * Validate a potential password
      */
     public static function isValidPassword(string $password) {
-        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[^\n]{8,}$/';
+        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[^\n]{8,255}$/';
         $error = '';
         if (preg_match($passwordPattern, $password) !== 1) {
             $error = 'Password must be at least 8 characters long and ' .
