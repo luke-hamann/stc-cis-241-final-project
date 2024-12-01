@@ -1,9 +1,3 @@
-<?php
-/**
- * Model: RegisterViewModel
- */
-?>
-
 <?php include('./views/shared/header.php'); ?>
 
 <div class="row">
@@ -13,7 +7,8 @@
             <?php include('./views/shared/formErrors.php'); ?>
             <div class="mb-3">
                 <label for="name" class="form-label">Username</label>
-                <input type="text" name="name" id="name" value="<?php echo (isset($model) ? $model->name : ''); ?>" class="form-control" />
+                <input type="text" name="name" id="name"
+                    value="<?php echo (isset($model) ? $model->name : ''); ?>" class="form-control" />
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
