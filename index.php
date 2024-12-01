@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Main Controller
- * Purpose: To serve as the entry point where controllers and models are imported
+ * Purpose: To serve as the application entry point where controllers and models are imported
  */
 
 // Import the necessary models
@@ -29,11 +29,11 @@ $isPostRequest = ($_SERVER['REQUEST_METHOD'] == 'POST');
 
 // Import the controllers
 require('./controllers/_utilityFunctions.php');
-require('./controllers/adminController.php');
 require('./controllers/accountController.php');
+require('./controllers/adminController.php');
 require('./controllers/homeController.php');
 require('./controllers/postController.php');
 
-return404($currentUser);
+return404();
 
 ?>
