@@ -1,32 +1,27 @@
 <?php include('./views/shared/header.php'); ?>
 
-<div class="container mt-5">
+<div class="row my-5">
+    <?php $post = $model->post; ?>
     <?php include('./views/shared/post.php'); ?>
-
     <h2 class="mt-3 mx-3 mb-1">Comments</h2>
-
     <div class="ms-3">
-        <?php echo count($post->comments) . ' comment' . (count($post->comments) == 1 ? '' : 's'); ?>
+        <?php echo count($model->post->comments) . ' comment' . (count($model->post->comments) == 1 ? '' : 's'); ?>
     </div>
-
-    <?php if (isset($currentUser)) : ?>
+    <?php if (isset($model->currentUser)) : ?>
         <form action="?action=post" method="post" class="m-3">
             <?php include('./views/shared/formErrors.php'); ?>
-            <input type="hidden" name="postId" value="<?php echo $post->id; ?>" />
+            <input type="hidden" name="postId" value="<?php echo $model->post->id; ?>" />
             <div class="mb-3">
-                <textarea name="content" class="form-control"><?php echo (isset($comment) ? $comment->content : ''); ?></textarea>
+                <textarea name="content" class="form-control"><?php echo (isset($model->comment) ? $model->comment->content : ''); ?></textarea>
             </div>
             <div>
                 <input type="submit" value="Comment" class="btn btn-primary" />
             </div>
         </form>
     <?php endif; ?>
-
-    <?php if (count($post->comments) > 0) : ?>
-        <?php foreach ($post->comments as $comment) : ?>
-            <?php include('./views/shared/comment.php'); ?>
-        <?php endforeach; ?>
-    <?php endif; ?>
+    <?php foreach ($model->post->comments as $comment) : ?>
+        <?php include('./views/shared/comment.php'); ?>
+    <?php endforeach; ?>
 </div>
 
 <?php include('./views/shared/footer.php'); ?>

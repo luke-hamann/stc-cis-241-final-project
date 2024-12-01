@@ -4,7 +4,7 @@
 if ($model->mode == 'Add') {
     $formAction = '?action=new';
 } else if ($model->mode == 'Edit') {
-    $formAction = '?action=editPost&id=' . $post->id;
+    $formAction = '?action=editPost&id=' . $model->post->id;
 }
 ?>
 
