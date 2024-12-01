@@ -1,6 +1,6 @@
 <?php include('./views/shared/header.php'); ?>
 
-<div class="container">
+<div class="row">
     <div>
         <h1 class="p-3 m-3">
             <?php echo htmlspecialchars($model->user->name); ?>
@@ -26,14 +26,12 @@
         <?php foreach ($model->posts as $post) : ?>
             <?php include('./views/shared/post.php'); ?>
         <?php endforeach; ?>
-    <?php else : ?>
+    <?php elseif ($model->mode == 'comments') : ?>
         <p class="m-3">
             <?php echo count($model->comments) . ' comment' . (count($model->comments) == 1 ? '' : 's'); ?>
         </p>
         <?php foreach ($model->comments as $comment) : ?>
-            <div>
-                <?php include('./views/shared/comment.php'); ?>
-            </div>
+            <?php include('./views/shared/comment.php'); ?>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>

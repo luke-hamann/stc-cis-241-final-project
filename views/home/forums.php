@@ -1,21 +1,19 @@
 <?php include('./views/shared/header.php'); ?>
 
-<div class="container">
+<div class="row">
     <h1 class="p-3 m-3">Forums</h1>
-
     <?php if (isset($model->currentUser) && $model->currentUser->isAdmin) : ?>
         <div class="mx-3 px-3">
             <a href="?action=addForum" class="btn btn-primary">&plus; Add Forum</a>
         </div>
     <?php endif; ?>
-
     <?php if (count($model->forums) == 0) : ?>
         <p class="p-3 m-3">
             No forums.
         </p>
     <?php else : ?>
         <p class="p-3 m-3">
-            <?php echo count($model->forums); ?> forum<?php echo (count($model->forums) == 1 ? '' : 's'); ?>
+            <?php echo count($model->forums) . ' forum' . (count($model->forums) == 1 ? '' : 's'); ?>
         </p>
         <table class="m-3">
             <tbody>

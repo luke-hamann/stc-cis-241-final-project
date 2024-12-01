@@ -1,6 +1,6 @@
 <?php include('./views/shared/header.php'); ?>
 
-<div class="container">
+<div class="row">
     <h1 class="m-3 p-3"><?php echo htmlspecialchars($forum->name); ?></h1>
     <?php if (isset($currentUser)) : ?>
         <div class="ms-3 ps-3">
