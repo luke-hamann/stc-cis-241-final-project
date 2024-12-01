@@ -1,9 +1,7 @@
-<?php if (count($model->getErrors()) > 0) : ?>
+<?php if (!$model->isValid()) : ?>
     <ul class="text-danger">
         <?php foreach ($model->getErrors() as $error) : ?>
-            <li>
-                <?php echo htmlspecialchars($error); ?>
-            </li>
+            <li><?php echo htmlspecialchars($error); ?></li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>

@@ -29,11 +29,5 @@
             <?php endif; ?>
         <?php endif; ?>
     </div>
-    <div>
-        <?php if ($post->isHidden) : ?>
-            [deleted]
-        <?php else : ?>
-            <?php echo nl2br(htmlspecialchars($post->content)); ?>
-        <?php endif; ?>
-    </div>
+    <div><?php echo ($post->isHidden) ? '[deleted]' : nl2br(htmlspecialchars($post->content)); ?></div>
 </div>

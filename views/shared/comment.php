@@ -1,9 +1,9 @@
 <div class="p-3 m-3 border">
     <p>
-        <?php if (!$comment->user->isGhost) : ?>
-            <a href="?action=user&id=<?php echo $comment->user->id; ?>" class="text-decoration-none"><?php echo htmlspecialchars($comment->user->name); ?></a>
-        <?php else : ?>
+        <?php if ($comment->user->isGhost) : ?>
             [deleted user]
+        <?php else : ?>
+            <a href="?action=user&id=<?php echo $comment->user->id; ?>" class="text-decoration-none"><?php echo htmlspecialchars($comment->user->name); ?></a>
         <?php endif; ?>
         &bullet;
         <?php echo $comment->creationDate->format(DATE_RFC7231); ?>
@@ -18,7 +18,7 @@
             <?php endif; ?>
         <?php endif; ?>
     </p>
-    <p>
+    <div>
         <?php echo nl2br(htmlspecialchars($comment->content)); ?>
-    </p>
+    </div>
 </div>
