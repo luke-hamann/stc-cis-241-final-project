@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: Edit Post View Model
- * Purpose: To provide a model for adding and editing posts
+ * Title: Post Edit View Model
+ * Purpose: To provide a model for the add post and edit post forms
  */
 
 require_once('./models/viewModels/_formViewModel.php');
@@ -13,7 +13,7 @@ class PostEditViewModel extends FormViewModel {
     public $currentUser;
 
     /**
-     * Construct th view model
+     * Construct the view model
      */
     public function __construct($mode, $post, $forums, $currentUser) {
         $this->mode = $mode;

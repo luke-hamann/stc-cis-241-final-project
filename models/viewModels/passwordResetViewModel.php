@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Reset Password Result View Model
- * Purpose: To provide a model for viewing the result of password reset operation
+ * Purpose: To provide a model for viewing the result of a password reset
  */
 class PasswordResetViewModel {
     public $selectedUser;

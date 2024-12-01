@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Change Password View Model
+ * Title: Password Change View Model
  * Purpose: To provide a model for the password change form
  */
 
@@ -26,28 +26,21 @@ class PasswordChangeViewModel extends FormViewModel {
      * Construct the view model based on an associative array
      */
     public static function fromArray(array $array) {
-        $passwordOld = '';
-        $passwordNew = '';
-        $passwordNewConfirm = '';
+        $model = new PasswordChangeViewModel('', '', '', null);
 
         if (array_key_exists('passwordOld', $array)) {
-            $passwordOld = $array['passwordOld'];
+            $model->passwordOld = $array['passwordOld'];
         }
 
         if (array_key_exists('passwordNew', $array)) {
-            $passwordNew = $array['passwordNew'];
+            $model->passwordNew = $array['passwordNew'];
         }
 
         if (array_key_exists('passwordNewConfirm', $array)) {
-            $passwordNewConfirm = $array['passwordNewConfirm'];
+            $model->passwordNewConfirm = $array['passwordNewConfirm'];
         }
 
-        return new PasswordChangeViewModel(
-            $passwordOld,
-            $passwordNew,
-            $passwordNewConfirm,
-            null
-        );
+        return $model;
     }
 
     /**
@@ -56,24 +49,24 @@ class PasswordChangeViewModel extends FormViewModel {
     public function validate() {
         $this->_errors = [];
 
-        $badPasswords = false;
+        $goodPasswords = true;
 
         if ($this->passwordOld == '') {
-            $badPasswords = true;
+            $goodPasswords = false;
             $this->_errors[] = 'Please enter your old password.';
         }
 
         if ($this->passwordNew == '') {
-            $badPasswords = true;
+            $goodPasswords = false;
             $this->_errors[] = 'Please enter your new password.';
         }
 
         if ($this->passwordNewConfirm == '') {
-            $badPasswords = true;
+            $goodPasswords = false;
             $this->_errors[] = 'Please confirm your new password.';
         }
 
-        if (!$badPasswords) {
+        if ($goodPasswords) {
             if ($this->passwordNew != $this->passwordNewConfirm) {
                 $this->_errors[] = 'Passwords do not match.';
             } else {
@@ -86,7 +79,7 @@ class PasswordChangeViewModel extends FormViewModel {
     }
 
     /**
-     * Create a user object based on the change password form
+     * Create a user object based on the password change form
      */
     public function getUser() {
         return new User(

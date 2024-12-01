@@ -22,18 +22,17 @@ class LoginViewModel extends FormViewModel {
      * Construct the view model based on an associative array
      */
     public static function fromArray(array $array) {
-        $name = '';
-        $password = '';
+        $model = new LoginViewModel('', '');
 
         if (array_key_exists('name', $array)) {
-            $name = $array['name'];
+            $model->name = $array['name'];
         }
 
         if (array_key_exists('password', $array)) {
-            $password = $array['password'];
+            $model->password = $array['password'];
         }
 
-        return new LoginViewModel($name, $password);
+        return $model;
     }
 
     /**
@@ -43,11 +42,11 @@ class LoginViewModel extends FormViewModel {
         $this->_errors = [];
 
         if ($this->name == '') {
-            $this->_errors[] = 'Please enter a name.';
+            $this->_errors[] = 'Please enter your name.';
         }
 
         if ($this->password == '') {
-            $this->_errors[] = 'Please enter a password.';
+            $this->_errors[] = 'Please enter your password.';
         }
     }
 }

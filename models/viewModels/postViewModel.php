@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Post View Model
- * Purpose: To provide a model for viewing an individual post
+ * Purpose: To provide a model for viewing a post, its comments, and the add comment form
  */
 
 require_once('./models/viewModels/_formViewModel.php');

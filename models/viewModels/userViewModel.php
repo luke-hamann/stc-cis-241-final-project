@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: User View Model
- * Purpose: To provide a model for viewing an individual user
+ * Purpose: To provide a model for viewing an individual user and their posts or comments
  */
 class UserViewModel {
     public $user;

@@ -24,23 +24,21 @@ class RegisterViewModel extends FormViewModel {
      * Construct the view model based on an associative array
      */
     public static function fromArray(array $array) {
-        $name = '';
-        $password = '';
-        $passwordConfirm = '';
+        $model = new RegisterViewModel('', '', '');
 
         if (array_key_exists('name', $array)) {
-            $name = $array['name'];
+            $model->name = $array['name'];
         }
 
         if (array_key_exists('password', $array)) {
-            $password = $array['password'];
+            $model->password = $array['password'];
         }
 
         if (array_key_exists('passwordConfirm', $array)) {
-            $passwordConfirm = $array['passwordConfirm'];
+            $model->passwordConfirm = $array['passwordConfirm'];
         }
 
-        return new RegisterViewModel($name, $password, $passwordConfirm);
+        return $model;
     }
 
     /**
@@ -59,6 +57,7 @@ class RegisterViewModel extends FormViewModel {
         }
 
         $goodPasswords = true;
+        
         if ($this->password == '') {
             $goodPasswords = false;
             $this->_errors[] = 'Please enter a password.';
