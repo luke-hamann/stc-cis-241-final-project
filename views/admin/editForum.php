@@ -8,7 +8,7 @@ if ($model->mode == 'Add') {
 }
 ?>
 
-<div class="container">
+<div class="row">
     <div class="col-md-4 offset-md-4 my-5">
         <form action="<?php echo $formAction; ?>" method="post">
             <h1><?php echo $model->mode; ?> Forum</h1>
