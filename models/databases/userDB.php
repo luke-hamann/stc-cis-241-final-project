@@ -103,14 +103,14 @@ class UserDB {
      * Update a user's password
      */
     public static function updateUserPassword(User $user) {
-        $user->password = password_hash($user->password, PASSWORD_DEFAULT);
+        $password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
             UPDATE Users
             SET password = :password
             WHERE id = :id
         ';
         Database::execute($query, [
-            ':password' => $user->password,
+            ':password' => $password,
             ':id' => $user->id
         ]);
     }
