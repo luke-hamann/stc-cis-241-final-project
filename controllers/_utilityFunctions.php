@@ -11,7 +11,8 @@ require_once('./models/viewModels/errorViewModel.php');
  */
 function return404() {
     global $currentUser;
-    $model = new ErrorViewModel('404 Not Found', 'That page does not exist.', $currentUser);
+    $model = new ErrorViewModel(
+        '404 Not Found', 'That page does not exist.', $currentUser);
     include('views/shared/error.php');
     exit();
 }
