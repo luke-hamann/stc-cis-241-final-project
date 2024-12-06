@@ -40,7 +40,8 @@ if ($action == 'post' && $isPostRequest) {
 // Display a form for creating a new post
 if ($action == 'new' && $isGetRequest) {
     checkLoggedIn($currentUser);
-    $model = new PostEditViewModel('Add', null, ForumDB::getForums(), $currentUser);
+    $model = new PostEditViewModel(
+        'Add', null, ForumDB::getForums(), $currentUser);
     include('./views/post/postEdit.php');
     exit();
 }
@@ -48,7 +49,8 @@ if ($action == 'new' && $isGetRequest) {
 // Accept form data for creating a new post
 if ($action == 'new' && $isPostRequest) {
     checkLoggedIn($currentUser);
-    $model = new PostEditViewModel('Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
+    $model = new PostEditViewModel(
+        'Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
     $model->post->userId = $currentUser->id;
 
     $model->validate();
