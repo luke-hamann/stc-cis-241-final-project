@@ -1,8 +1,6 @@
 <?php include('./views/shared/header.php'); ?>
 
-<?php include('./views/shared/userHeader.php'); ?>
-
-<div class="row">
+<div class="row my-5">
     <div class="col-sm-4 offset-sm-4">
         <h1>Change Password</h1>
         <form action="?action=changePassword" method="post">
