@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Main Controller
- * Purpose: To serve as the application entry point where controllers and models are imported
+ * Purpose: To be the entry point where controllers and models are imported
  */
 
 // Import the necessary models
@@ -23,7 +23,8 @@ if (!isset($_SESSION['userId'])) {
 $currentUser = UserDB::getUser($_SESSION['userId']);
 
 // Get the action and request type
-$action = FILTER_INPUT(INPUT_POST, 'action') ?? FILTER_INPUT(INPUT_GET, 'action') ?? 'home';
+$action = FILTER_INPUT(INPUT_POST, 'action')
+    ?? FILTER_INPUT(INPUT_GET, 'action') ?? 'home';
 $isGetRequest = ($_SERVER['REQUEST_METHOD'] == 'GET');
 $isPostRequest = ($_SERVER['REQUEST_METHOD'] == 'POST');
 
