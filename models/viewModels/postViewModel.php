@@ -11,18 +11,14 @@ class PostViewModel extends FormViewModel {
     public $currentUser;
     public $comment;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($post, $currentUser, $comment) {
         $this->post = $post;
         $this->currentUser = $currentUser;
         $this->comment = $comment;
     }
 
-    /**
-     * Validate the view model based on the contained comment
-     */
+    // Validate the view model based on the contained comment
     public function validate() {
         $this->_errors = $this->comment->getErrors();
     }

@@ -15,9 +15,7 @@ class Post {
     public $comments;
     public $isHidden;
 
-    /**
-     * Construct a post object
-     */
+    // Construct a post object
     public function __construct($id, $title, $content, $creationDate,
         $userId, $user, $forumId, $forum, $comments, $isHidden) {
         $this->id = $id;
@@ -32,9 +30,7 @@ class Post {
         $this->isHidden = $isHidden;
     }
 
-    /**
-     * Construct a post object based on an associative array
-     */
+    // Construct a post object based on an associative array
     public static function fromArray(array $array) {
         $post = new Post(0, '', '', new DateTime(), 0, null, 0, null, [], false);
 
@@ -59,9 +55,7 @@ class Post {
         return $post;
     }
 
-    /**
-     * Validate the post and generate error messages if applicable
-     */
+    // Validate the post and generate error messages if applicable
     public function getErrors() {
         $errors = [];
 

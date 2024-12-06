@@ -8,9 +8,7 @@ require_once('./models/viewModels/forumEditViewModel.php');
 require_once('./models/viewModels/deletionViewModel.php');
 require_once('./models/viewModels/passwordResetViewModel.php');
 
-/**
- * Display a form for creating a forum
- */
+// Display a form for creating a forum
 if ($action == 'addForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $model = new ForumEditViewModel(null, 'Add', $currentUser);
@@ -18,9 +16,7 @@ if ($action == 'addForum' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for creating a forum
- */
+// Accept form data for creating a forum
 if ($action == 'addForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $forum = Forum::fromArray($_POST);
@@ -39,9 +35,7 @@ if ($action == 'addForum' && $isPostRequest) {
     header('Location: ?action=forums');
 }
 
-/**
- * Display a form for editing a forum
- */
+// Display a form for editing a forum
 if ($action == 'editForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -51,9 +45,7 @@ if ($action == 'editForum' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for editing a forum
- */
+// Accept form data for editing a forum
 if ($action == 'editForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -75,9 +67,7 @@ if ($action == 'editForum' && $isPostRequest) {
     header('Location: ?action=forums');
 }
 
-/**
- * Display a form to confirm the deletion of a forum
- */
+// Display a form to confirm the deletion of a forum
 if ($action == 'deleteForum' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -95,9 +85,7 @@ if ($action == 'deleteForum' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data to confirm the deletion of a forum
- */
+// Accept form data to confirm the deletion of a forum
 if ($action == 'deleteForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -106,9 +94,7 @@ if ($action == 'deleteForum' && $isPostRequest) {
     header('Location: ?action=forums');
 }
 
-/**
- * Display a form to confirm the deletion of a thread
- */
+// Display a form to confirm the deletion of a thread
 if ($action == 'deleteThread' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -126,9 +112,7 @@ if ($action == 'deleteThread' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data to confirm the deletion of a thread
- */
+// Accept form data to confirm the deletion of a thread
 if ($action == 'deleteThread' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -137,9 +121,7 @@ if ($action == 'deleteThread' && $isPostRequest) {
     header('Location: ?action=forum&id=' . $post->forumId);
 }
 
-/**
- * Display a form to confirm the deletion of a user
- */
+// Display a form to confirm the deletion of a user
 if ($action == 'deleteUser' && $isGetRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -160,9 +142,7 @@ if ($action == 'deleteUser' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data to confirm the deletion of a user
- */
+// Accept form data to confirm the deletion of a user
 if ($action == 'deleteUser' && $isPostRequest) {
     checkAdmin($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -175,9 +155,7 @@ if ($action == 'deleteUser' && $isPostRequest) {
     header('Location: ?action=users');
 }
 
-/**
- * Accept form data for resetting a user's password
- */
+// Accept form data for resetting a user's password
 if ($action == 'resetPassword' && $isPostRequest) {
     checkAdmin($currentUser);
     $confirm = FILTER_INPUT(INPUT_POST, 'confirm');

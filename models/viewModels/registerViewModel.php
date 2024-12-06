@@ -11,18 +11,14 @@ class RegisterViewModel extends FormViewModel {
     public $password;
     public $passwordConfirm;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct(string $name, string $password, string $passwordConfirm) {
         $this->name = $name;
         $this->password = $password;
         $this->passwordConfirm = $passwordConfirm;
     }
 
-    /**
-     * Construct the view model based on an associative array
-     */
+    // Construct the view model based on an associative array
     public static function fromArray(array $array) {
         $model = new RegisterViewModel('', '', '');
 
@@ -41,9 +37,7 @@ class RegisterViewModel extends FormViewModel {
         return $model;
     }
 
-    /**
-     * Validate the view model based upon the entered fields
-     */
+    // Validate the view model based upon the entered fields
     public function validate() {
         $this->_errors = [];
 
@@ -80,9 +74,7 @@ class RegisterViewModel extends FormViewModel {
         }
     }
     
-    /**
-     * Create a user object based on the registration form
-     */
+    // Create a user object based on the registration form
     public function getUser() {
         return new User(0, $this->name, $this->password, false, false);
     }

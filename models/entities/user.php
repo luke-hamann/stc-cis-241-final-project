@@ -10,9 +10,7 @@ class User {
     public $isAdmin;
     public $isGhost;
 
-    /**
-     * Construct a user object
-     */
+    // Construct a user object
     public function __construct($id, $name, $password, $isAdmin, $isGhost) {
         $this->id = $id;
         $this->name = $name;
@@ -21,9 +19,7 @@ class User {
         $this->isGhost = $isGhost;
     }
 
-    /**
-     * Validate a potential username
-     */
+    // Validate a potential username
     public static function isValidName(string $name) {
         $namePattern = '/^[a-z\d_-]{1,32}$/';
         $error = '';
@@ -34,9 +30,7 @@ class User {
         return $error;
     }
 
-    /**
-     * Validate a potential password
-     */
+    // Validate a potential password
     public static function isValidPassword(string $password) {
         $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[^\n]{8,255}$/';
         $error = '';

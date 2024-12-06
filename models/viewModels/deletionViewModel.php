@@ -10,9 +10,7 @@ class DeletionViewModel {
     public $cancelUrl;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($id, $summary, $formActionStub, $cancelUrl, $currentUser) {
         $this->id = $id;
         $this->summary = $summary;

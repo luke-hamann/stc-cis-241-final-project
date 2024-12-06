@@ -8,9 +8,7 @@ require_once('./models/viewModels/loginViewModel.php');
 require_once('./models/viewModels/registerViewModel.php');
 require_once('./models/viewModels/passwordChangeViewModel.php');
 
-/**
- * Display the login form
- */
+// Display the login form
 if ($action == 'login' && $isGetRequest) {
     sendHomeIfLoggedIn($currentUser);
     $model = new LoginViewModel('', '');
@@ -18,9 +16,7 @@ if ($action == 'login' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for logging in
- */
+// Accept form data for logging in
 if ($action == 'login' && $isPostRequest) {
     sendHomeIfLoggedIn($currentUser);
 
@@ -42,9 +38,7 @@ if ($action == 'login' && $isPostRequest) {
     header('Location: .');
 }
 
-/**
- * Display the registration form
- */
+// Display the registration form
 if ($action == 'register' && $isGetRequest) {
     sendHomeIfLoggedIn($currentUser);
     $model = new RegisterViewModel('', '', '');
@@ -52,9 +46,7 @@ if ($action == 'register' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for registering
- */
+// Accept form data for registering
 if ($action == 'register' && $isPostRequest) {
     sendHomeIfLoggedIn($currentUser);
     $model = RegisterViewModel::fromArray($_POST);
@@ -73,18 +65,14 @@ if ($action == 'register' && $isPostRequest) {
     header('Location: .');
 }
 
-/**
- * Process logout attempts
- */
+// Process logout attempts
 if ($action == 'logout' && $isPostRequest) {
     $_SESSION = array();
     session_destroy();
     header('Location: .');
 }
 
-/**
- * Display the change password form
- */
+// Display the change password form
 if ($action == 'changePassword' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $model = new PasswordChangeViewModel('', '', '', $currentUser);
@@ -92,9 +80,7 @@ if ($action == 'changePassword' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data to change passwords
- */
+// Accept form data to change passwords
 if ($action == 'changePassword' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $model = PasswordChangeViewModel::fromArray($_POST);

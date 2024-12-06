@@ -9,9 +9,7 @@ class Database {
     private static $password = 'password';
     private static $db;
 
-    /**
-     * Return the database connection
-     */
+    // Return the database connection
     public static function getDB() {
         if (isset(self::$db)) return self::$db;
 
@@ -24,9 +22,7 @@ class Database {
         return self::$db;
     }
 
-    /**
-     * Execute a query with given parameter bindings
-     */
+    // Execute a query with given parameter bindings
     public static function execute(string $query, array $bindings = []) {
         $db = self::getDB();
         $statement = $db->prepare($query);

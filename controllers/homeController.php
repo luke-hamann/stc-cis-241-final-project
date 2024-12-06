@@ -11,27 +11,21 @@ require_once('./models/viewModels/usersViewModel.php');
 require_once('./models/viewModels/userViewModel.php');
 require_once('./models/viewModels/postViewModel.php');
 
-/**
- * Display the home page with recent posts from all forums
- */
+// Display the home page with recent posts from all forums
 if ($action == 'home' && $isGetRequest) {
     $model = new HomeViewModel(PostDB::getRecentPosts(), $currentUser);
     include('./views/home/home.php');
     exit();
 }
 
-/**
- * Display the list of all forums
- */
+// Display the list of all forums
 if ($action == 'forums' && $isGetRequest) {
     $model = new ForumsViewModel(ForumDB::getForums(), $currentUser);
     include('./views/home/forums.php');
     exit();
 }
 
-/**
- * Display posts within a given forum
- */
+// Display posts within a given forum
 if ($action == 'forum' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $forum = getObjectOr404('forum', $id);
@@ -40,18 +34,14 @@ if ($action == 'forum' && $isGetRequest) {
     exit();
 }
 
-/**
- * Display the list of all users
- */
+// Display the list of all users
 if ($action == 'users' && $isGetRequest) {
     $model = new UsersViewModel(UserDB::getUsers(), $currentUser);
     include('./views/home/users.php');
     exit();
 }
 
-/**
- * Display a single user and all their posts or comments
- */
+// Display a single user and all their posts or comments
 if ($action == 'user' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $user = getObjectOr404('user', $id);

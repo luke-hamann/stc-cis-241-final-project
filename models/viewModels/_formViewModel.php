@@ -6,35 +6,25 @@
 abstract class FormViewModel {
     protected $_errors = [];
 
-    /**
-     * Validate the model by adding applicable error messages to the error list
-     */
+    // Validate the model by adding applicable error messages to the error list
     abstract public function validate();
 
-    /**
-     * Get the errors
-     */
+    // Get the errors
     public function getErrors() {
         return $this->_errors;
     }
 
-    /**
-     * Add an error to the error array
-     */
+    // Add an error to the error array
     public function pushError(string $error) {
         $this->_errors[] = $error;
     }
 
-    /**
-     * Add an error to the start of the error array
-     */
+    // Add an error to the start of the error array
     public function unshiftError(string $error) {
         array_unshift($this->_errors, $error);
     }
 
-    /**
-     * Check whether the view model is valid
-     */
+    // Check whether the view model is valid
     public function isValid() {
         return (count($this->_errors) == 0);
     }

@@ -9,9 +9,7 @@ require_once('./models/viewModels/postEditViewModel.php');
 require_once('./models/viewModels/commentEditViewModel.php');
 require_once('./models/viewModels/deletionViewModel.php');
 
-/**
- * Display a given post with its comments
- */
+// Display a given post with its comments
 if ($action == 'post' && $isGetRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $post = getObjectOr404('post', $id);
@@ -20,9 +18,7 @@ if ($action == 'post' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for publishing a new comment
- */
+// Accept form data for publishing a new comment
 if ($action == 'post' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'postId', FILTER_VALIDATE_INT);
@@ -41,9 +37,7 @@ if ($action == 'post' && $isPostRequest) {
     header('Location: ?action=post&id=' . $comment->postId);
 }
 
-/**
- * Display a form for creating a new post
- */
+// Display a form for creating a new post
 if ($action == 'new' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $model = new PostEditViewModel('Add', null, ForumDB::getForums(), $currentUser);
@@ -51,9 +45,7 @@ if ($action == 'new' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for creating a new post
- */
+// Accept form data for creating a new post
 if ($action == 'new' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $model = new PostEditViewModel('Add', Post::fromArray($_POST), ForumDB::getForums(), $currentUser);
@@ -69,9 +61,7 @@ if ($action == 'new' && $isPostRequest) {
     header('Location: ?action=post&id=' . $id);
 }
 
-/**
- * Display a form for editing a post
- */
+// Display a form for editing a post
 if ($action == 'editPost' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -82,9 +72,7 @@ if ($action == 'editPost' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for editing a post
- */
+// Accept form data for editing a post
 if ($action == 'editPost' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -104,9 +92,7 @@ if ($action == 'editPost' && $isPostRequest) {
     header('Location: ?action=post&id=' . $post->id);
 }
 
-/**
- * Accept form data for toggling the visibility of a post
- */
+// Accept form data for toggling the visibility of a post
 if ($action == 'togglePostVisibility' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -115,9 +101,7 @@ if ($action == 'togglePostVisibility' && $isPostRequest) {
     header('Location: ?action=post&id=' . $post->id);
 }
 
-/**
- * Display a form for editing a comment
- */
+// Display a form for editing a comment
 if ($action == 'editComment' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -127,9 +111,7 @@ if ($action == 'editComment' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data for editing a comment
- */
+// Accept form data for editing a comment
 if ($action == 'editComment' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);
@@ -148,9 +130,7 @@ if ($action == 'editComment' && $isPostRequest) {
     header('Location: ?action=post&id=' . $comment->postId);
 }
 
-/**
- * Display a form to confirm the deletion of a comment
- */
+// Display a form to confirm the deletion of a comment
 if ($action == 'deleteComment' && $isGetRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -166,9 +146,7 @@ if ($action == 'deleteComment' && $isGetRequest) {
     exit();
 }
 
-/**
- * Accept form data to confirm the deletion of a comment
- */
+// Accept form data to confirm the deletion of a comment
 if ($action == 'deleteComment' && $isPostRequest) {
     checkLoggedIn($currentUser);
     $id = FILTER_INPUT(INPUT_POST, 'id', FILTER_VALIDATE_INT);

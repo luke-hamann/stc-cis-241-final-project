@@ -11,18 +11,14 @@ class ForumEditViewModel extends FormViewModel {
     public $mode;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($forum, $mode, $currentUser) {
         $this->forum = $forum;
         $this->mode = $mode;
         $this->currentUser = $currentUser;
     }
 
-    /**
-     * Validate the view model by validating the contained forum object
-     */
+    // Validate the view model by validating the contained forum object
     public function validate() {
         $this->_errors = $this->forum->getErrors();
     }

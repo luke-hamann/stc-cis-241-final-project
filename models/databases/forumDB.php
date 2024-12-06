@@ -9,16 +9,12 @@ class ForumDB {
         FROM Forums
     ';
 
-    /**
-     * Convert a SQL row to a forum object
-     */
+    // Convert a SQL row to a forum object
     private static function convertRowToForum($row) {
         return new Forum($row['id'], $row['name'], []);
     }
 
-    /**
-     * Get a list of all forums
-     */
+    // Get a list of all forums
     public static function getForums() {
         $query = self::BASE_QUERY . 'ORDER BY name';
         $rows = Database::execute($query);
@@ -29,9 +25,7 @@ class ForumDB {
         return $forums;
     }
 
-    /**
-     * Get a forum with all its posts
-     */
+    // Get a forum with all its posts
     public static function getForum(int $id) {
         $query = self::BASE_QUERY . 'WHERE id = :id';
         $rows = Database::execute($query, [':id' => $id]);
@@ -41,9 +35,7 @@ class ForumDB {
         return $forum;
     }
 
-    /**
-     * Get a forum by its name
-     */
+    // Get a forum by its name
     public static function getForumByName(string $name) {
         $query = self::BASE_QUERY . 'WHERE name = :name';
         $rows = Database::execute($query, [':name' => $name]);
@@ -51,9 +43,7 @@ class ForumDB {
         return self::convertRowToForum($rows[0]);
     }
 
-    /**
-     * Validate a forum
-     */
+    // Validate a forum
     public static function isForumValid(Forum $forum) {
         $query = self::BASE_QUERY . 'WHERE name = :name AND id != :id';
         $rows = Database::execute($query, [
@@ -63,9 +53,7 @@ class ForumDB {
         return (count($rows) == 0);
     }
 
-    /**
-     * Add a forum
-     */
+    // Add a forum
     public static function addForum(Forum $forum) {
         $query = '
             INSERT INTO Forums (name)
@@ -75,9 +63,7 @@ class ForumDB {
         return Database::getDB()->lastInsertId();
     }
 
-    /**
-     * Update a forum
-     */
+    // Update a forum
     public static function updateForum(Forum $forum) {
         $query = '
             UPDATE Forums
@@ -90,9 +76,7 @@ class ForumDB {
         ]);
     }
 
-    /**
-     * Delete a forum
-     */
+    // Delete a forum
     public static function deleteForum(Forum $forum) {
         $query = 'DELETE FROM Forums WHERE id = :id';
         Database::execute($query, [':id' => $forum->id]);

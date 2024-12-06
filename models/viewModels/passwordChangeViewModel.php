@@ -12,9 +12,7 @@ class PasswordChangeViewModel extends FormViewModel {
     public $passwordNewConfirm;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($passwordOld, $passwordNew, $passwordNewConfirm, $currentUser) {
         $this->passwordOld = $passwordOld;
         $this->passwordNew = $passwordNew;
@@ -22,9 +20,7 @@ class PasswordChangeViewModel extends FormViewModel {
         $this->currentUser = $currentUser;
     }
 
-    /**
-     * Construct the view model based on an associative array
-     */
+    // Construct the view model based on an associative array
     public static function fromArray(array $array) {
         $model = new PasswordChangeViewModel('', '', '', null);
 
@@ -43,9 +39,7 @@ class PasswordChangeViewModel extends FormViewModel {
         return $model;
     }
 
-    /**
-     * Validate the view model based on the entered fields
-     */
+    // Validate the view model based on the entered fields
     public function validate() {
         $this->_errors = [];
 
@@ -78,9 +72,7 @@ class PasswordChangeViewModel extends FormViewModel {
         }
     }
 
-    /**
-     * Create a user object based on the password change form
-     */
+    // Create a user object based on the password change form
     public function getUser() {
         return new User(
             $this->currentUser->id,

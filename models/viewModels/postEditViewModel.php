@@ -12,9 +12,7 @@ class PostEditViewModel extends FormViewModel {
     public $forums;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($mode, $post, $forums, $currentUser) {
         $this->mode = $mode;
         $this->post = $post;
@@ -22,9 +20,7 @@ class PostEditViewModel extends FormViewModel {
         $this->currentUser = $currentUser;
     }
 
-    /**
-     * Validate the view model based on the contained post object
-     */
+    // Validate the view model based on the contained post object
     public function validate() {
         $this->_errors = $this->post->getErrors();
     }

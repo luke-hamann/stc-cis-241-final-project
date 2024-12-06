@@ -8,9 +8,7 @@ class ErrorViewModel {
     public $body;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($title, $body, $currentUser) {
         $this->title = $title;
         $this->body = $body;

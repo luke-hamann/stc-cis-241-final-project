@@ -7,9 +7,7 @@ class ForumViewModel {
     public $forum;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($forum, $currentUser) {
         $this->forum = $forum;
         $this->currentUser = $currentUser;

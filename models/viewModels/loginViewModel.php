@@ -10,17 +10,13 @@ class LoginViewModel extends FormViewModel {
     public $name;
     public $password;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct(string $name, string $password) {
         $this->name = $name;
         $this->password = $password;
     }
 
-    /**
-     * Construct the view model based on an associative array
-     */
+    // Construct the view model based on an associative array
     public static function fromArray(array $array) {
         $model = new LoginViewModel('', '');
 
@@ -35,9 +31,7 @@ class LoginViewModel extends FormViewModel {
         return $model;
     }
 
-    /**
-     * Validate the view model based upon the entered fields
-     */
+    // Validate the view model based upon the entered fields
     public function validate() {
         $this->_errors = [];
 

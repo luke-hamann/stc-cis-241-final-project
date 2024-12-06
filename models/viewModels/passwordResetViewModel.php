@@ -7,9 +7,7 @@ class PasswordResetViewModel {
     public $selectedUser;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($selectedUser, $currentUser) {
         $this->selectedUser = $selectedUser;
         $this->currentUser = $currentUser;

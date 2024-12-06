@@ -18,9 +18,7 @@ class CommentDB {
             JOIN Users ON Comments.userId = Users.id
     ';
 
-    /**
-     * Convert SQL result row to comment object
-     */
+    // Convert SQL result row to comment object
     public static function convertRowToComment($row) {
         return new Comment(
             $row['id'],
@@ -39,9 +37,7 @@ class CommentDB {
         );
     }
 
-    /**
-     * Convert SQL result rows to a list of comment objects
-     */
+    // Convert SQL result rows to a list of comment objects
     public static function convertRowsToComments($rows) {
         $comments = [];
         foreach ($rows as $row) {
@@ -50,9 +46,7 @@ class CommentDB {
         return $comments;
     }
 
-    /**
-     * Get a comment by its id
-     */
+    // Get a comment by its id
     public static function getComment(int $id) {
         $query = self::BASE_QUERY . 'WHERE Comments.id = :id';
         $rows = Database::execute($query, [':id' => $id]);
@@ -60,9 +54,7 @@ class CommentDB {
         return self::convertRowToComment($rows[0]);
     }
 
-    /**
-     * Get all comments associated with a given post
-     */
+    // Get all comments associated with a given post
     public static function getPostComments(int $postId) {
         $query = self::BASE_QUERY . '
             WHERE Comments.postId = :postId
@@ -72,9 +64,7 @@ class CommentDB {
         return self::convertRowsToComments($rows);
     }
 
-    /**
-     * Get all comments by a given user
-     */
+    // Get all comments by a given user
     public static function getUserComments(int $userId) {
         $query = self::BASE_QUERY . '
             WHERE Comments.userId = :userId
@@ -84,9 +74,7 @@ class CommentDB {
         return self::convertRowsToComments($rows);
     }
 
-    /**
-     * Add a comment
-     */
+    // Add a comment
     public static function addComment(Comment $comment) {
         $query = '
             INSERT INTO Comments (content, postId, userId)
@@ -99,9 +87,7 @@ class CommentDB {
         ]);
     }
 
-    /**
-     * Update a comment
-     */
+    // Update a comment
     public static function updateComment(Comment $comment) {
         $query = '
             UPDATE Comments
@@ -114,9 +100,7 @@ class CommentDB {
         ]);
     }
 
-    /**
-     * Delete a comment
-     */
+    // Delete a comment
     public static function deleteComment(int $id) {
         $query = '
             DELETE FROM Comments

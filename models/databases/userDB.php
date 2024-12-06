@@ -9,9 +9,7 @@ class UserDB {
         FROM Users
     ';
 
-    /**
-     * Convert a SQL row to a user object
-     */
+    // Convert a SQL row to a user object
     private static function convertRowToUser($row) {
         return new User(
             $row['id'],
@@ -22,9 +20,7 @@ class UserDB {
         );
     }
 
-    /**
-     * Convert SQL rows to a list of user objects
-     */
+    // Convert SQL rows to a list of user objects
     private static function convertRowsToUsers($rows) {
         $users = [];
         foreach ($rows as $row) {
@@ -33,9 +29,7 @@ class UserDB {
         return $users;
     }
 
-    /**
-     * Get a list of all users, excluding ghosts
-     */
+    // Get a list of all users, excluding ghosts
     public static function getUsers() {
         $query = self::BASE_QUERY . '
             WHERE isGhost = FALSE
@@ -45,9 +39,7 @@ class UserDB {
         return self::convertRowsToUsers($rows);
     }
 
-    /**
-     * Get a user based on their id
-     */
+    // Get a user based on their id
     public static function getUser(int $id) {
         $query = self::BASE_QUERY . 'WHERE id = :id';
         $rows = Database::execute($query, [':id' => $id]);
@@ -55,9 +47,7 @@ class UserDB {
         return self::convertRowToUser($rows[0]);
     }
 
-    /**
-     * Get a user based on their name
-     */
+    // Get a user based on their name
     public static function getUserByName(string $name) {
         $query = self::BASE_QUERY . 'WHERE name = :name';
         $rows = Database::execute($query, [':name' => $name]);
@@ -65,9 +55,7 @@ class UserDB {
         return self::convertRowToUser($rows[0]);
     }
 
-    /**
-     * Attempt to authenticate given credentials
-     */
+    // Attempt to authenticate given credentials
     public static function loginUser(string $name, string $password) {
         $query = self::BASE_QUERY . 'WHERE name = :name';
         $rows = Database::execute($query, [':name' => $name]);
@@ -81,9 +69,7 @@ class UserDB {
         return $user;
     }
 
-    /**
-     * Add a user
-     */
+    // Add a user
     public static function addUser(User $user) {
         $user->password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
@@ -99,9 +85,7 @@ class UserDB {
         return Database::getDB()->lastInsertId();
     }
 
-    /**
-     * Update a user's password
-     */
+    // Update a user's password
     public static function updateUserPassword(User $user) {
         $password = password_hash($user->password, PASSWORD_DEFAULT);
         $query = '
@@ -115,18 +99,14 @@ class UserDB {
         ]);
     }
 
-    /**
-     * Reset a user's password
-     */
+    // Reset a user's password
     public static function resetUserPassword(User $user) {
         $user->password = bin2hex(random_bytes(16));
         self::updateUserPassword($user);
         return $user;
     }
 
-    /**
-     * Mark a user as a ghost
-     */
+    // Mark a user as a ghost
     public static function markUserAsGhost(User $user) {
         $query = '
             UPDATE Users
@@ -136,9 +116,7 @@ class UserDB {
         Database::execute($query, [':id' => $user->id]);
     }
 
-    /**
-     * Delete a user
-     */
+    // Delete a user
     public static function deleteUser(User $user) {
         $query = 'DELETE FROM Users WHERE id = :id';
         Database::execute($query, [':id' => $user->id]);

@@ -22,9 +22,7 @@ class PostDB {
             JOIN Forums ON Posts.forumId = Forums.id
     ';    
 
-    /**
-     * Convert a SQL row to a post object
-     */
+    // Convert a SQL row to a post object
     private static function convertRowToPost($row) {
         return new Post(
             $row['id'],
@@ -46,9 +44,7 @@ class PostDB {
         );
     }
 
-    /**
-     * Convert SQL rows to a list of post objects
-     */
+    // Convert SQL rows to a list of post objects
     private static function convertRowsToPosts($rows) {
         $posts = [];
         foreach ($rows as $row) {
@@ -57,9 +53,7 @@ class PostDB {
         return $posts;
     }
 
-    /**
-     * Get recent posts across all forums
-     */
+    // Get recent posts across all forums
     public static function getRecentPosts(int $maxCount = 20) {
         $db = Database::getDB();
         $query = self::BASE_QUERY . '
@@ -75,9 +69,7 @@ class PostDB {
         return self::convertRowsToPosts($rows);
     }
 
-    /**
-     * Get all posts within a given forum
-     */
+    // Get all posts within a given forum
     public static function getForumPosts(int $forumId) {
         $query = self::BASE_QUERY . '
             WHERE Posts.forumId = :forumId
@@ -87,9 +79,7 @@ class PostDB {
         return self::convertRowsToPosts($rows);
     }
 
-    /**
-     * Get all posts by a given user
-     */
+    // Get all posts by a given user
     public static function getUserPosts(int $userId) {
         $query = self::BASE_QUERY . '
             WHERE Posts.userId = :userId
@@ -99,9 +89,7 @@ class PostDB {
         return self::convertRowsToPosts($rows);
     }
 
-    /**
-     * Get a single post with its comments
-     */
+    // Get a single post with its comments
     public static function getPost(int $id) {
         $query = self::BASE_QUERY . 'WHERE Posts.id = :id';
         $rows = Database::execute($query, [':id' => $id]);
@@ -111,9 +99,7 @@ class PostDB {
         return $post;
     }
 
-    /**
-     * Add a post
-     */
+    // Add a post
     public static function addPost(Post $post) {
         $query = '
             INSERT INTO Posts (title, content, userId, forumId, isHidden)
@@ -128,9 +114,7 @@ class PostDB {
         return Database::getDB()->lastInsertId();
     }
 
-    /**
-     * Update a post
-     */
+    // Update a post
     public static function updatePost(Post $post) {
         $query = '
             UPDATE Posts
@@ -151,9 +135,7 @@ class PostDB {
         ]);
     }
 
-    /**
-     * Toggle whether a post is marked as hidden
-     */
+    // Toggle whether a post is marked as hidden
     public static function togglePostVisibility(Post $post) {
         $query = '
             UPDATE Posts
@@ -163,9 +145,7 @@ class PostDB {
         Database::execute($query, [':id' => $post->id]);
     }
 
-    /**
-     * Delete a post
-     */
+    // Delete a post
     public static function deletePost(Post $post) {
         $query = '
             DELETE FROM Posts

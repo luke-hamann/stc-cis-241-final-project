@@ -8,18 +8,14 @@ class Forum {
     public $name;
     public $posts;
 
-    /**
-     * Construct a forum object
-     */
+    // Construct a forum object
     public function __construct($id, $name, $posts) {
         $this->id = $id;
         $this->name = $name;
         $this->posts = $posts;
     }
 
-    /**
-     * Construct a forum object based on an associative array
-     */
+    // Construct a forum object based on an associative array
     public static function fromArray(array $array) {
         $forum = new Forum(0, '', []);
 
@@ -35,9 +31,7 @@ class Forum {
         return $forum;
     }
 
-    /**
-     * Validate the forum object and generate error messages if applicable
-     */
+    // Validate the forum object and generate error messages if applicable
     public function getErrors() {
         $errors = [];
 

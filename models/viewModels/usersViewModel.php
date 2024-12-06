@@ -7,9 +7,7 @@ class UsersViewModel {
     public $users;
     public $currentUser;
 
-    /**
-     * Construct the view model
-     */
+    // Construct the view model
     public function __construct($users, $currentUser) {
         $this->users = $users;
         $this->currentUser = $currentUser;

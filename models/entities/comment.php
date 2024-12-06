@@ -12,9 +12,7 @@ class Comment {
     public $userId;
     public $user;
 
-    /**
-     * Construct a comment object
-     */
+    // Construct a comment object
     public function __construct($id, $content, $creationDate, $postId, $post, $userId, $user) {
         $this->id = $id;
         $this->content = $content;
@@ -25,9 +23,7 @@ class Comment {
         $this->user = $user;
     }
 
-    /**
-     * Construct a comment object based on an associative array
-     */
+    // Construct a comment object based on an associative array
     public static function fromArray(array $array) {
         $comment = new Comment(0, '', new DateTime(), 0, null, 0, null);
         
@@ -43,9 +39,7 @@ class Comment {
         return $comment;
     }
 
-    /**
-     * Validate the comment and generate error messages if applicable
-     */
+    // Validate the comment and generate error messages if applicable
     public function getErrors() {
         $errors = [];
 
