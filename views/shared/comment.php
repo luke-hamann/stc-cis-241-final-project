@@ -7,6 +7,8 @@
         <?php endif; ?>
         &bullet;
         <?php echo $comment->creationDate->format(DATE_RFC7231); ?>
+        &bullet;
+        <a href="?action=post&id=<?php echo $comment->postId; ?>" class="text-decoration-none">^</a>
         <?php if (isset($currentUser)) : ?>
             <?php if ($comment->userId == $currentUser->id) : ?>
                 &bullet;
