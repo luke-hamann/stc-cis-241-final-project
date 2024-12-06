@@ -1,4 +1,4 @@
-<div class="p-3 m-3 border">
+<div class="p-3 my-3 border">
     <h2>
         <a href="?action=post&id=<?php echo $post->id; ?>" class="text-decoration-none"><?php echo ($post->isHidden ? '[deleted]' : htmlspecialchars($post->title)); ?></a>
     </h2>

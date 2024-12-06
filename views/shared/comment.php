@@ -1,4 +1,4 @@
-<div class="p-3 m-3 border">
+<div class="p-3 my-3 border">
     <p>
         <?php if ($comment->user->isGhost) : ?>
             [deleted user]

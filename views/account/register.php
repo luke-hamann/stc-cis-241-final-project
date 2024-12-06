@@ -1,7 +1,7 @@
 <?php include('./views/shared/header.php'); ?>
 
 <div class="row">
-    <div class="col-sm-4 offset-sm-4">
+    <div class="col-md-4 offset-md-4">
         <form action="?action=register" method="post" class="mt-5">
             <h1>Register</h1>
             <?php include('./views/shared/formErrors.php'); ?>

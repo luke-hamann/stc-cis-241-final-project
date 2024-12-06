@@ -3,12 +3,12 @@
 <div class="row my-5">
     <?php $post = $model->post; ?>
     <?php include('./views/shared/post.php'); ?>
-    <h2 class="mt-3 mx-3 mb-1">Comments</h2>
-    <div class="ms-3">
+    <h2 class="my-3">Comments</h2>
+    <div class="p-3">
         <?php echo count($model->post->comments) . ' comment' . (count($model->post->comments) == 1 ? '' : 's'); ?>
     </div>
     <?php if (isset($model->currentUser)) : ?>
-        <form action="?action=post" method="post" class="m-3">
+        <form action="?action=post" method="post" class="p-3">
             <?php include('./views/shared/formErrors.php'); ?>
             <input type="hidden" name="postId" value="<?php echo $model->post->id; ?>" />
             <div class="mb-3">
