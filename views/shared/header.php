@@ -32,7 +32,7 @@
                             </li>
                             <li class="nav-item">
                                 <form action="?action=logout" method="post">
-                                    <input type="submit" value="Logout" class="btn btn-outline-danger ms-lg-2" />
+                                    <input type="submit" value="Logout" class="btn btn-outline-danger ms-md-2" />
                                 </form>
                             </li>
                         <?php else : ?>
