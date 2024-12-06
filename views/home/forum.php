@@ -1,9 +1,9 @@
 <?php include('./views/shared/header.php'); ?>
 
 <div class="row">
-    <h1 class="m-3 p-3"><?php echo htmlspecialchars($forum->name); ?></h1>
+    <h1 class="p-3 mt-3 mb-0"><?php echo htmlspecialchars($forum->name); ?></h1>
     <?php if (isset($currentUser)) : ?>
-        <div class="ms-3 ps-3">
+        <div class="p-3">
             <a href="?action=new" class="btn btn-primary">&plus; New Post</a>
         </div>
     <?php endif; ?>
