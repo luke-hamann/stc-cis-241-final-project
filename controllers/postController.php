@@ -92,7 +92,8 @@ if ($action == 'editPost' && $isPostRequest) {
     $post = Post::fromArray($_POST);
     $post->userId = $currentUser->id;
 
-    $model = new PostEditViewModel('Edit', $post, ForumDB::getForums(), $currentUser);
+    $model = new PostEditViewModel(
+        'Edit', $post, ForumDB::getForums(), $currentUser);
     $model->validate();
     if (!$model->isValid()) {
         include('./views/post/postEdit.php');
