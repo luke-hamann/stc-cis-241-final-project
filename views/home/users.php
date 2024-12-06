@@ -17,7 +17,7 @@
                             <form action="?action=resetPassword" method="post">
                                 <input type="hidden" name="id" value="<?php echo $user->id; ?>" />
                                 <input type="submit" value="Reset Password" class="btn btn-warning" />
-                                <div class="d-inline-block">
+                                <div class="d-inline-block ps-3">
                                     <input type="checkbox" name="confirm" id="confirm-reset-<?php echo $user->id; ?>" />
                                     <label for="confirm-reset-<?php echo $user->id; ?>">
                                         Confirm
