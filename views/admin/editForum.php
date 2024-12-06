@@ -8,8 +8,8 @@ if ($model->mode == 'Add') {
 }
 ?>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4 my-5">
+<div class="row my-5">
+    <div class="col-md-4 offset-md-4">
         <form action="<?php echo $formAction; ?>" method="post">
             <h1><?php echo $model->mode; ?> Forum</h1>
             <input type="hidden" name="id" value="<?php echo (isset($model->forum) ? $model->forum->id : '0'); ?>" />

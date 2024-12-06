@@ -8,8 +8,8 @@ if ($model->mode == 'Add') {
 }
 ?>
 
-<div class="row">
-    <div class="col-md-6 offset-md-3 my-5">
+<div class="row my-5">
+    <div class="col-md-6 offset-md-3">
         <form action="<?php echo $formAction; ?>" method="post">
             <h1><?php echo $model->mode; ?> Post</h1>
             <?php include('./views/shared/formErrors.php'); ?>

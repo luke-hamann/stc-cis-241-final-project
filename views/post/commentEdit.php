@@ -1,7 +1,7 @@
 <?php include('./views/shared/header.php'); ?>
 
-<div class="row">
-    <div class="col-md-6 offset-md-3 my-5">
+<div class="row my-5">
+    <div class="col-md-6 offset-md-3">
         <form action="?action=editComment" method="post">
             <h1 class="mb-3">Edit Comment</h1>
             <input type="hidden" name="id" value="<?php echo $model->comment->id; ?>" />

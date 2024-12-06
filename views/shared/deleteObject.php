@@ -1,7 +1,7 @@
 <?php include('./views/shared/header.php'); ?>
 
-<div class="row">
-    <div class="col-sm-4 offset-sm-4 my-5">
+<div class="row my-5">
+    <div class="col-sm-4 offset-sm-4">
         <form action="<?php echo $model->formActionStub . $model->id; ?>" method="post">
             <h1>Confirm Deletion</h1>
             <input type="hidden" name="id" value="<?php echo $model->id; ?>" />
