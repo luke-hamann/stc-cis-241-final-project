@@ -1,7 +1,7 @@
 <?php include('./views/shared/header.php'); ?>
 
 <div class="row my-5">
-    <div class="col-sm-4 offset-sm-4">
+    <div class="col-md-4 offset-md-4">
         <h1>Change Password</h1>
         <form action="?action=changePassword" method="post">
             <?php include('./views/shared/formErrors.php'); ?>
