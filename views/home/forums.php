@@ -19,14 +19,14 @@
             <tbody>
                 <?php foreach ($model->forums as $forum) : ?>
                     <tr>
-                        <td>
+                        <td class="p-3">
                             <a href="?action=forum&id=<?php echo $forum->id; ?>" class="d-block text-decoration-none"><?php echo htmlspecialchars($forum->name); ?></a>
                         </td>
                         <?php if (isset($model->currentUser) && $model->currentUser->isAdmin) : ?>
-                            <td>
+                            <td class="p-3">
                                 <a href="?action=editForum&id=<?php echo $forum->id; ?>" class="btn btn-warning">Edit</a>
                             </td>
-                            <td>
+                            <td class="p-3">
                                 <a href="?action=deleteForum&id=<?php echo $forum->id; ?>" class="btn btn-danger">Delete</a>
                             </td>
                         <?php endif; ?>
