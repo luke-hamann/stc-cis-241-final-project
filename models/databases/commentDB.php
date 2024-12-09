@@ -68,7 +68,7 @@ class CommentDB {
     public static function getUserComments(int $userId) {
         $query = self::BASE_QUERY . '
             WHERE Comments.userId = :userId
-            ORDER BY Comments.creationDate
+            ORDER BY Comments.creationDate DESC
         ';
         $rows = Database::execute($query, [':userId' => $userId]);
         return self::convertRowsToComments($rows);
