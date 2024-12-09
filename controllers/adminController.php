@@ -175,3 +175,5 @@ if ($action == 'resetPassword' && $isPostRequest) {
     include('./views/admin/resetPasswordResult.php');
     exit();
 }
+
+?>
