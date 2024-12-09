@@ -10,6 +10,7 @@ class UserViewModel {
     public $comments;
     public $currentUser;
 
+    // Construct the view model
     public function __construct($user, $mode, $posts, $comments, $currentUser) {
         $this->user = $user;
         $this->mode = $mode;
