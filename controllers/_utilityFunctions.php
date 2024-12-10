@@ -22,7 +22,7 @@ function checkLoggedIn($currentUser) {
     }
 }
 
-// Verify that a user is an admin
+// Verify that the user is an admin or return 404
 function checkAdmin($currentUser) {
     checkLoggedIn($currentUser);
     if (!$currentUser->isAdmin) {
@@ -30,7 +30,7 @@ function checkAdmin($currentUser) {
     }
 }
 
-// Redirect the user to home if they are already logged in
+// Redirect the user to the home page if they are already logged in
 function sendHomeIfLoggedIn($currentUser) {
     if (isset($currentUser)) {
         header('Location: .');
@@ -67,8 +67,8 @@ function getObjectOr404($type, $id) {
     return $object;
 }
 
-// Attempt to get an object of a type and id that is owned by a specific user
-// and return a 404 if not found
+// Attempt to get an object of a type and id that is owned by a user
+// or return a 404 if not found
 function getOwnedObjectOr404($type, $id, $currentUser) {
     $object = getObjectOr404($type, $id);
 

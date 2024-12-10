@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Users View Model
- * Purpose: To provide a model for viewing a list of all users
+ * Purpose: To provide a model for viewing a list of users
  */
 class UsersViewModel {
     public $users;

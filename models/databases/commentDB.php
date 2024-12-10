@@ -18,7 +18,7 @@ class CommentDB {
             JOIN Users ON Comments.userId = Users.id
     ';
 
-    // Convert SQL result row to comment object
+    // Convert a SQL result row to a comment object
     public static function convertRowToComment($row) {
         return new Comment(
             $row['id'],

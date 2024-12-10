@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Login View Model
- * Purpose: To provide a view model for the login form
+ * Purpose: To provide a model for the login form
  */
 
 require_once('./models/viewModels/_formViewModel.php');
