@@ -24,8 +24,8 @@ class User {
         $namePattern = '/^[a-z\d_-]{1,32}$/';
         $error = '';
         if (preg_match($namePattern, $name) !== 1) {
-            $error = 'Names must contain only lowercase letters, ' .
-            'numbers, hyphens, and underscores.';
+            $error = 'Names must be 32 characters or less and ' .
+                'contain only lowercase letters, numbers, hyphens, and underscores.';
         }
         return $error;
     }
