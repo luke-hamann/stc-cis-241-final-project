@@ -12,7 +12,7 @@
             <?php include('./views/shared/formErrors.php'); ?>
             <input type="hidden" name="postId" value="<?php echo $model->post->id; ?>" />
             <div class="mb-3">
-                <textarea name="content" class="form-control"><?php echo (isset($model->comment) ? $model->comment->content : ''); ?></textarea>
+                <textarea name="content" class="form-control"><?php echo (isset($model->comment) ? htmlspecialchars($model->comment->content) : ''); ?></textarea>
             </div>
             <div>
                 <input type="submit" value="Comment" class="btn btn-primary" />

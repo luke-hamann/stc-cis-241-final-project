@@ -16,7 +16,7 @@ if ($model->mode == 'Add') {
             <?php include('./views/shared/formErrors.php'); ?>
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" name="name" id="name" value="<?php echo (isset($model->forum) ? $model->forum->name : ''); ?>" class="form-control" autocomplete="off" />
+                <input type="text" name="name" id="name" value="<?php echo (isset($model->forum) ? htmlspecialchars($model->forum->name) : ''); ?>" class="form-control" autocomplete="off" />
             </div>
             <div class="text-center">
                 <input type="submit" value="Submit" class="btn btn-primary" />

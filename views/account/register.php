@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <label for="name" class="form-label">Username</label>
                 <input type="text" name="name" id="name" autocomplete="off"
-                    value="<?php echo (isset($model) ? $model->name : ''); ?>" class="form-control" />
+                    value="<?php echo (isset($model) ? htmlspecialchars($model->name) : ''); ?>" class="form-control" />
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
