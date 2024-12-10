@@ -63,14 +63,6 @@ TO 'forumSite'@'localhost';
 
 /* Insert sample data */
 
-INSERT INTO Users (name, password, isAdmin, isGhost)
-VALUES
-    ('admin', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', TRUE, FALSE),
-    ('alice', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE),
-    ('bob', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE),
-    ('charlie', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE),
-    ('dave', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE);
-
 INSERT INTO Forums (name)
 VALUES
     ('fishing'),
@@ -78,6 +70,14 @@ VALUES
     ('literature'),
     ('programming'),
     ('technology');
+
+INSERT INTO Users (name, password, isAdmin, isGhost)
+VALUES
+    ('admin', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', TRUE, FALSE),
+    ('alice', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE),
+    ('bob', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE),
+    ('charlie', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE),
+    ('dave', '$2y$10$pwcCUCus2lrIZgizv5AxdequbpK3VmgGwqbSSnDOT/P.WsvFGWCKy', FALSE, FALSE);
 
 INSERT INTO Posts (title, content, creationDate, userId, forumId, isHidden)
 VALUES
