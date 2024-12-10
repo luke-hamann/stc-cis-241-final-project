@@ -80,6 +80,7 @@ if ($action == 'editPost' && $isPostRequest) {
     $id = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     getOwnedObjectOr404('post', $id, $currentUser);
     $post = Post::fromArray($_POST);
+    $post->id = $id;
     $post->userId = $currentUser->id;
 
     $model = new PostEditViewModel(

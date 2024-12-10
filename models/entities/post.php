@@ -63,11 +63,11 @@ class Post {
             $errors[] = 'Please select a forum.';
         }
 
-        if (preg_match('/^[^\n]{1,128}$/', $this->title) !== 1) {
+        if (preg_match('/^.{1,128}$/', $this->title) !== 1) {
             $errors[] = 'Please enter a title of 1 to 128 characters.';
         }
 
-        if (preg_match('/^.{1,1024}$/', $this->content) !== 1) {
+        if (preg_match('/^[\s\S]{1,1024}$/', $this->content) !== 1) {
             $errors[] = 'Please enter content of 1 to 1024 characters.';
         }
 

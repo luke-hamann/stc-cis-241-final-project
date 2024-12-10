@@ -43,7 +43,7 @@ class Comment {
     public function getErrors() {
         $errors = [];
 
-        if (preg_match('/^.{1,1024}$/', $this->content) !== 1) {
+        if (preg_match('/^[\s\S]{1,1024}$/', $this->content) !== 1) {
             $errors[] = 'Content must be between 1 and 1,024 characters long.';
         }
 

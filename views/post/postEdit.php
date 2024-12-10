@@ -30,7 +30,7 @@ if ($model->mode == 'Add') {
             </div>
             <div class="mb-3">
                 <label for="content" class="form-label">Content</label>
-                <textarea name="content" id="content" rows="5" class="form-control"><?php echo (isset($model->post) ? $model->post->title : ''); ?></textarea>
+                <textarea name="content" id="content" rows="5" class="form-control"><?php echo (isset($model->post) ? $model->post->content : ''); ?></textarea>
             </div>
             <div class="text-center">
                 <input type="submit" value="Submit" class="btn btn-primary" />
