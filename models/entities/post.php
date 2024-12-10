@@ -68,7 +68,7 @@ class Post {
         }
 
         if (preg_match('/^[\s\S]{1,1024}$/', $this->content) !== 1) {
-            $errors[] = 'Please enter content of 1 to 1024 characters.';
+            $errors[] = 'Please enter content of 1 to 1,024 characters.';
         }
 
         return $errors;
