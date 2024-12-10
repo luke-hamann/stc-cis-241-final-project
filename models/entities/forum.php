@@ -35,9 +35,9 @@ class Forum {
     public function getErrors() {
         $errors = [];
 
-        if (preg_match('/^[a-z\d_-]{1,32}$/', $this->name) !== 1) {
+        if (preg_match('/^[a-z0-9_-]{1,32}$/', $this->name) !== 1) {
             $errors[] = 'Forum name must be 1 to 32 characters long and ' .
-            'contain only lowercase letters, numbers, hyphens, and underscores.';
+                'contain only lowercase letters, numbers, hyphens, and underscores.';
         }
 
         return $errors;

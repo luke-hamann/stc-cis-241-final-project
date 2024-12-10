@@ -21,7 +21,7 @@ class User {
 
     // Validate a potential username
     public static function isValidName(string $name) {
-        $namePattern = '/^[a-z\d_-]{1,32}$/';
+        $namePattern = '/^[a-z0-9_-]{1,32}$/';
         $error = '';
         if (preg_match($namePattern, $name) !== 1) {
             $error = 'Names must be 32 characters or less and ' .
@@ -32,7 +32,7 @@ class User {
 
     // Validate a potential password
     public static function isValidPassword(string $password) {
-        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,255}$/';
+        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,255}$/';
         $error = '';
         if (preg_match($passwordPattern, $password) !== 1) {
             $error = 'Password must be at least 8 characters long and ' .
