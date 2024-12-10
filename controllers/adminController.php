@@ -56,7 +56,7 @@ if ($action == 'editForum' && $isPostRequest) {
     $model->validate();
     
     if (!ForumDB::isForumValid($forum)) {
-        $errors = 'A forum with that name already exists.';
+        $model->pushError('A forum with that name already exists.');
     }
 
     if (!$model->isValid()) {
