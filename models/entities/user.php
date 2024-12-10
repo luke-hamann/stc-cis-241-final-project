@@ -32,7 +32,7 @@ class User {
 
     // Validate a potential password
     public static function isValidPassword(string $password) {
-        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)[^\n]{8,255}$/';
+        $passwordPattern = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,255}$/';
         $error = '';
         if (preg_match($passwordPattern, $password) !== 1) {
             $error = 'Password must be at least 8 characters long and ' .
