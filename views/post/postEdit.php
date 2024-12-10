@@ -26,7 +26,7 @@ if ($model->mode == 'Add') {
             </div>
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" name="title" id="title" value="<?php echo (isset($model->post) ? $model->post->title : ''); ?>" class="form-control" />
+                <input type="text" name="title" id="title" value="<?php echo (isset($model->post) ? $model->post->title : ''); ?>" class="form-control" autocomplete="off" />
             </div>
             <div class="mb-3">
                 <label for="content" class="form-label">Content</label>
