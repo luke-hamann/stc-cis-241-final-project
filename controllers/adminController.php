@@ -21,6 +21,7 @@ if ($action == 'addForum' && $isPostRequest) {
     checkAdmin($currentUser);
     $forum = Forum::fromArray($_POST);
     $model = new ForumEditViewModel($forum, 'Add', $currentUser);
+    $model->validate();
 
     if (!ForumDB::isForumValid($forum)) {
         $model->pushError('A forum with that name already exists.');
@@ -52,8 +53,8 @@ if ($action == 'editForum' && $isPostRequest) {
     getObjectOr404('forum', $id);
     $forum = Forum::fromArray($_POST);
     $model = new ForumEditViewModel($forum, 'Edit', $currentUser);
-
     $model->validate();
+    
     if (!ForumDB::isForumValid($forum)) {
         $errors = 'A forum with that name already exists.';
     }
