@@ -51,8 +51,10 @@ if ($action == 'user' && $isGetRequest) {
     }
 
     $mode = FILTER_INPUT(INPUT_GET, 'mode');
-    if ($mode !== 'posts' && $mode !== 'comments') {
+    if ($mode === null) {
         $mode = 'posts';
+    } else if ($mode !== 'posts' && $mode !== 'comments') {
+        return404();
     }
 
     $posts = [];
