@@ -86,6 +86,12 @@ if ($action == 'changePassword' && $isPostRequest) {
     $model = PasswordChangeViewModel::fromArray($_POST);
     $model->currentUser = $currentUser;
     $model->validate();
+
+    if ($model->isValid() &&
+        UserDB::loginUser($model->currentUser->name, $model->passwordOld) == null) {
+        $model->pushError('Old password is incorrect.');
+    }
+
     if (!$model->isValid()) {
         include('./views/account/changePassword.php');
         exit();
