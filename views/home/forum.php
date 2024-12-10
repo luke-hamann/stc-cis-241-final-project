@@ -8,7 +8,7 @@
         </div>
     <?php endif; ?>
     <?php if (count($forum->posts) == 0) : ?>
-        <p>No posts.</p>
+        <div class="p-3">No posts.</div>
     <?php else : ?>
         <?php foreach ($forum->posts as $post) : ?>
             <?php include('./views/shared/post.php'); ?>
