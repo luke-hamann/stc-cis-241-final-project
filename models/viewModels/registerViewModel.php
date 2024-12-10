@@ -42,7 +42,7 @@ class RegisterViewModel extends FormViewModel {
         $this->_errors = [];
 
         if ($this->name == '') {
-            $this->_errors[] = 'Please enter a name.';
+            $this->_errors[] = 'Please enter a username.';
         } else {
             $nameError = User::isValidName($this->name);
             if ($nameError != '') {
