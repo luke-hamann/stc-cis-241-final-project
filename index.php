@@ -1,10 +1,11 @@
 <?php
 /**
  * Title: Main Controller
- * Purpose: To be the entry point where controllers and models are imported
+ * Purpose: To be the entry point where controllers and models are imported,
+ *          and the request context is prepared
  */
 
-// Import the necessary models
+// Import the models
 require_once('models/entities/forum.php');
 require_once('models/entities/user.php');
 require_once('models/entities/post.php');
@@ -22,18 +23,18 @@ if (!isset($_SESSION['userId'])) {
 }
 $currentUser = UserDB::getUser($_SESSION['userId']);
 
-// Get the action and request type
+// Get the action and request method
 $action = FILTER_INPUT(INPUT_POST, 'action')
     ?? FILTER_INPUT(INPUT_GET, 'action') ?? 'home';
 $isGetRequest = ($_SERVER['REQUEST_METHOD'] == 'GET');
 $isPostRequest = ($_SERVER['REQUEST_METHOD'] == 'POST');
 
 // Import the controllers
-require('./controllers/_utilityFunctions.php');
-require('./controllers/accountController.php');
-require('./controllers/adminController.php');
-require('./controllers/homeController.php');
-require('./controllers/postController.php');
+require_once('./controllers/_utilityFunctions.php');
+require_once('./controllers/accountController.php');
+require_once('./controllers/adminController.php');
+require_once('./controllers/homeController.php');
+require_once('./controllers/postController.php');
 
 return404();
 
