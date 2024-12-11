@@ -16,7 +16,7 @@ class Database {
         try {
             self::$db = new PDO(self::$dsn, self::$username, self::$password);
         } catch (PDOException $e) {
-            throw new Exception('Database connection error');
+            exit();
         }
 
         return self::$db;
